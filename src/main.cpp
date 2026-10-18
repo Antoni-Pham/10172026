@@ -15,8 +15,7 @@
 
 using namespace vex;
 
-// A global instance of competition
-competition Competition;
+
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -29,6 +28,7 @@ competition Competition;
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
+  
   runPreAutonomous();
 }
 

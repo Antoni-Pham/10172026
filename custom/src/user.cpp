@@ -1,11 +1,13 @@
 #include "vex.h"
 #include "motor-control.h"
+#include "../include/user.h"
 #include "../include/autonomous.h"
 #include "../include/subsystems.h"
 #include "../include/robot-config.h"
 
-// Modify autonomous, driver, or pre-auton code below
 
+// Modify autonomous, driver, or pre-auton code below
+competition Competition;
 void runAutonomous() {
   startSubsystems();
   updateDriverSubsystems(false);
@@ -60,6 +62,8 @@ void runAutonomous() {
 // bool isIntaking;
 // bool isOuttaking;
 
+volatile int selectedRollerColor = static_cast<int>(RollerColor::Red);
+
 void runDriver() {
   // Stop auton subsystems until we incorporate auton functions to aid driver.
   stopSubsystems();
@@ -76,6 +80,7 @@ void runDriver() {
   bool l1 = false;
   bool l2 = false;
   bool buttonX = false;
+  bool buttonY = false;
   int clawState = 0; //0 = Open | 1 = Closed
   bool toggleOn = false;
   bool brainTimerOn = false;
@@ -121,7 +126,7 @@ void runDriver() {
       clawState = 0;
       Brain.resetTimer();
 
-      brainTimerOn = false;
+      brainTimerOn = true;
       after1 = false;
       after2 = false;
     } else if (!controller_1.ButtonL2.pressing() && l2) {
@@ -152,12 +157,35 @@ void runDriver() {
       toggle.spin(reverse, 9, volt);
       toggleOn = true;
       buttonX = true;
-    } else if (controller_1.ButtonX.pressing() && toggleOn && !buttonX) {
+    } else if ((controller_1.ButtonX.pressing() && toggleOn && !buttonX)) {
       toggle.stop(hold);
       toggleOn = false;
       buttonX = true;
+    } else if (toggleOptical.isNearObject() && toggleOptical.value() > 180 && toggleOptical.value() < 210 && toggleOn && selectedRollerColor == static_cast<int>(RollerColor::Blue) && !buttonX) {
+      toggle.stop(hold);
+      toggleOn = false;
+      buttonX = false;
+    } else if (toggleOptical.isNearObject() && toggleOptical.value() > 0 && toggleOptical.value() < 30 && toggleOn && selectedRollerColor == static_cast<int>(RollerColor::Red) && !buttonX) {
+      toggle.stop(hold);
+      toggleOn = false;
+      buttonX = false;
     }
-    
+
+    wait(15, msec);
+    //red 0-30
+    //yellow 60-90
+    //blue 180-210
+    // if(!controller_1.ButtonY.pressing() && buttonY){
+    //   buttonY = false;
+    // } else if (controller_1.ButtonY.pressing() && !toggleOn && !buttonY) {
+    //   toggle.spin(reverse, 9, volt);
+    //   toggleOn = true;
+    //   buttonY = true;
+    // } else if ((controller_1.ButtonY.pressing() && toggleOn && !buttonY)) {
+    //   toggle.stop(hold);
+    //   toggleOn = false;
+    //   buttonY = true;
+    // }
     /* Past attempts */
     // true/false for controller button presses
     // l1 = controller_1.ButtonL1.pressing();
@@ -215,7 +243,64 @@ void runDriver() {
     // }
   }
 }
+void drawRollerColorSelector() {
+  Brain.Screen.clearScreen();
+  Brain.Screen.setFont(mono20);
+  Brain.Screen.setCursor(1, 1);
+  Brain.Screen.print("Select toggle color");
 
+  const int button_y = 70;
+  const int button_width = 140;
+  const int button_height = 90;
+  const int button_gap = 20;
+  const RollerColor colors[] = {
+      RollerColor::Red, RollerColor::Blue, RollerColor::Yellow};
+  const color fills[] = {red, blue, yellow};
+  const char* labels[] = {"RED", "BLUE", "YELLOW"};
+
+  for (int i = 0; i < 3; ++i) {
+    const int x = 10 + i * (button_width + button_gap);
+    Brain.Screen.setFillColor(fills[i]);
+    Brain.Screen.setPenColor(
+        colors[i] == static_cast<RollerColor>(selectedRollerColor) ? white
+                                                                     : black);
+    Brain.Screen.drawRectangle(x, button_y, button_width, button_height);
+    Brain.Screen.setCursor(button_y / 20 + 1, x / 10 + 2);
+    Brain.Screen.print("%s", labels[i]);
+  }
+
+  Brain.Screen.setPenColor(white);
+  Brain.Screen.setCursor(11, 2);
+  Brain.Screen.print("Selected color: %d", selectedRollerColor);
+}
+void rollerColorSelectorLoop() {
+  bool was_pressed = false;
+  while (!Competition.isEnabled()) {
+    const bool pressed = Brain.Screen.pressing();
+    if (pressed && !was_pressed) {
+      const int x = Brain.Screen.xPosition();
+      const int y = Brain.Screen.yPosition();
+      const int button_y = 70;
+
+      if (y >= button_y && y <= button_y + 90) {
+        if (x >= 10 && x <= 150) {
+          selectedRollerColor = static_cast<int>(RollerColor::Red);
+        } else if (x >= 170 && x <= 310) {
+          selectedRollerColor = static_cast<int>(RollerColor::Blue);
+        } else if (x >= 330 && x <= 470) {
+          selectedRollerColor = static_cast<int>(RollerColor::Yellow);
+        }
+
+        // setRollerTargetColor(
+        //     static_cast<RollerColor>(selected_roller_color));
+        // drawRollerColorSelector();
+      }
+    }
+    was_pressed = pressed;
+    
+    wait(20, msec);
+  }
+}
 void runPreAutonomous() {
     // Initializing   mvc  Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
@@ -232,17 +317,20 @@ void runPreAutonomous() {
   }
 
   double current_heading = inertial_sensor.heading();
-  Brain.Screen.print(current_heading);
-  
+  // Brain.Screen.print(current_heading);
+  drawRollerColorSelector();
+  thread rollerColorSelectorThread = thread(rollerColorSelectorLoop);
   // odom tracking
-  resetChassis();
-  if(using_horizontal_tracker && using_vertical_tracker) {
-    thread odom = thread(trackXYOdomWheel);
-  } else if (using_horizontal_tracker) {
-    thread odom = thread(trackXOdomWheel);
-  } else if (using_vertical_tracker) {
-    thread odom = thread(trackYOdomWheel);
-  } else {
-    thread odom = thread(trackNoOdomWheel);
-  }
+  // resetChassis();
+  // if(using_horizontal_tracker && using_vertical_tracker) {
+  //   thread odom = thread(trackXYOdomWheel);
+  // } else if (using_horizontal_tracker) {
+  //   thread odom = thread(trackXOdomWheel);
+  // } else if (using_vertical_tracker) {
+  //   thread odom = thread(trackYOdomWheel);
+  // } else {
+  //   thread odom = thread(trackNoOdomWheel);
+  // }
+
+
 }
