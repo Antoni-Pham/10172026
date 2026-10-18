@@ -16,28 +16,30 @@ controller controller_1 = controller(primary);
 // gearSetting is one of the following: ratio36_1(red), ratio18_1(green), ratio6_1(blue)
 // all chassis motors should be reversed appropriately so that they spin vertical when given a positive voltage input
 // such as driveChassis(12, 12)
-motor left_chassis1 = motor(PORT1, ratio6_1, true);
-motor left_chassis2 = motor(PORT2, ratio6_1, true);
+
+
+motor left_chassis1 = motor(PORT11, ratio6_1, true);
+motor left_chassis2 = motor(PORT12, ratio6_1, true);
 motor_group left_chassis = motor_group(left_chassis1, left_chassis2);
 
-motor right_chassis1 = motor(PORT4, ratio6_1, false);
-motor right_chassis2 = motor(PORT5, ratio6_1, false);
+motor right_chassis1 = motor(PORT8, ratio6_1, false);
+motor right_chassis2 = motor(PORT9, ratio6_1, false);
 motor_group right_chassis = motor_group(right_chassis1, right_chassis2);
 
-motor liftL = motor(PORT1, ratio18_1, true);
-motor liftR = motor(PORT6, ratio18_1, false);
+motor liftL = motor(PORT1, ratio18_1, false);
+motor liftR = motor(PORT6, ratio18_1, true);
 motor_group lift = motor_group(liftL, liftR);
 
 motor toggle = motor(PORT2, ratio18_1, true);
 
-motor clawL = motor(PORT3, ratio18_1, true);
-motor clawR = motor(PORT10, ratio18_1, false);
+motor clawL = motor(PORT10, ratio18_1, false);
+motor clawR = motor(PORT3, ratio18_1, true);
 motor clawRotator = motor(PORT4, ratio18_1, true);
 motor_group claw = motor_group(clawL, clawR);
 
-inertial inertial_sensor = inertial(PORT8);
-optical toggleOptical = optical(PORT9);
-distance clawDetect = distance(PORT10);
+inertial inertial_sensor = inertial(PORT7);
+optical toggleOptical = optical(PORT15);
+distance clawDetect = distance(PORT20);
 
 
 
