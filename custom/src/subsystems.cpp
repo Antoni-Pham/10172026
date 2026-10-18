@@ -56,6 +56,7 @@ bool lift_pid_initialized = false;
 volatile bool has_game_element = false;
 bool game_element_released = false;
 bool subsystem_task_started = false;
+thread subsystem_task;
 bool autonomous_sequence_active = false;
 volatile int autonomous_score_count = 0;
 LiftState lift_state = LiftState::Intaking;
@@ -277,7 +278,14 @@ void startSubsystems() {
   clawRotator.spinToPosition(claw_rotator_retract_degrees, degrees, false);
 
   subsystem_task_started = true;
-  thread subsystem_task = thread(subsystemLoop);
+  subsystem_task = thread(subsystemLoop);
+}
+
+void stopSubsystems() {
+  if (!subsystem_task_started) return;
+
+  subsystem_task.interrupt();
+  subsystem_task_started = false;
 }
 
 void updateDriverSubsystems(bool raise_lift) {

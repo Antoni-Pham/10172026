@@ -24,6 +24,7 @@ extern double claw_rotator_open_degrees;
 extern double toggle_motor_voltage;
 
 void startSubsystems();
+void stopSubsystems();
 void updateDriverSubsystems(bool raise_lift);
 void setLiftTargetHeight(double height_inches);
 void setRollerTargetColor(RollerColor color);
