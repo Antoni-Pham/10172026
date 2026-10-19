@@ -5,16 +5,16 @@
 #include "../include/subsystems.h"
 #include "../include/robot-config.h"
 
+int auton_selected = 1;
 
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
 void runAutonomous() {
-  startSubsystems();
-  updateDriverSubsystems(false);
-  int auton_selected = 1;
+  //startSubsystems();
+  //updateDriverSubsystems(false);
   switch(auton_selected) {
     case 1:
-      //exampleAuton();
+      exampleAuton2();
       break;
     case 2:
       //exampleAuton2();
@@ -80,7 +80,6 @@ void runDriver() {
   bool l1 = false;
   bool l2 = false;
   bool buttonX = false;
-  bool buttonY = false;
   int clawState = 0; //0 = Open | 1 = Closed
   bool toggleOn = false;
   bool brainTimerOn = false;
@@ -150,7 +149,7 @@ void runDriver() {
       lift.stop(hold);
     }
 
-    // Toggle control: Button X = Toggle on/off
+    // Toggle control: Button X = Toggle on/off. Hold it to override the toggle and run the motor. If the optical sensor detects the wrong color, it will stop the motor.
     if(!controller_1.ButtonX.pressing() && buttonX){
       buttonX = false;
     } else if (controller_1.ButtonX.pressing() && !toggleOn && !buttonX) {
@@ -170,7 +169,6 @@ void runDriver() {
       toggleOn = false;
       buttonX = false;
     }
-
     wait(15, msec);
     //red 0-30
     //yellow 60-90
@@ -261,9 +259,7 @@ void drawRollerColorSelector() {
   for (int i = 0; i < 3; ++i) {
     const int x = 10 + i * (button_width + button_gap);
     Brain.Screen.setFillColor(fills[i]);
-    Brain.Screen.setPenColor(
-        colors[i] == static_cast<RollerColor>(selectedRollerColor) ? white
-                                                                     : black);
+    Brain.Screen.setPenColor(colors[i] == static_cast<RollerColor>(selectedRollerColor) ? white:black);
     Brain.Screen.drawRectangle(x, button_y, button_width, button_height);
     Brain.Screen.setCursor(button_y / 20 + 1, x / 10 + 2);
     Brain.Screen.print("%s", labels[i]);
@@ -290,9 +286,10 @@ void rollerColorSelectorLoop() {
         } else if (x >= 330 && x <= 470) {
           selectedRollerColor = static_cast<int>(RollerColor::Yellow);
         }
-
+        Brain.Screen.setCursor(11, 2);
+  Brain.Screen.print("Selected color: %d", selectedRollerColor);
         // setRollerTargetColor(
-        //     static_cast<RollerColor>(selected_roller_color));
+        // static_cast<RollerColor>(selected_roller_color));
         // drawRollerColorSelector();
       }
     }
@@ -305,8 +302,7 @@ void runPreAutonomous() {
     // Initializing   mvc  Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
 
-  // To be re-enabled when starting auton work.
-  // startSubsystems();
+  //startSubsystems();
   
   // Calibrate inertial sensor
   inertial_sensor.calibrate();
@@ -315,22 +311,21 @@ void runPreAutonomous() {
   while (inertial_sensor.isCalibrating()) {
     wait(10, msec);
   }
-
-  double current_heading = inertial_sensor.heading();
+  // double current_heading = inertial_sensor.heading();
   // Brain.Screen.print(current_heading);
   drawRollerColorSelector();
   thread rollerColorSelectorThread = thread(rollerColorSelectorLoop);
   // odom tracking
-  // resetChassis();
-  // if(using_horizontal_tracker && using_vertical_tracker) {
-  //   thread odom = thread(trackXYOdomWheel);
-  // } else if (using_horizontal_tracker) {
-  //   thread odom = thread(trackXOdomWheel);
-  // } else if (using_vertical_tracker) {
-  //   thread odom = thread(trackYOdomWheel);
-  // } else {
-  //   thread odom = thread(trackNoOdomWheel);
-  // }
+  resetChassis();
+  if(using_horizontal_tracker && using_vertical_tracker) {
+    thread odom = thread(trackXYOdomWheel);
+  } else if (using_horizontal_tracker) {
+    thread odom = thread(trackXOdomWheel);
+  } else if (using_vertical_tracker) {
+    thread odom = thread(trackYOdomWheel);
+  } else {
+    thread odom = thread(trackNoOdomWheel);
+  }
 
 
 }

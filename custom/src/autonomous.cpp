@@ -129,14 +129,37 @@ void exampleAuton() {
 }
 
 void exampleAuton2() {
-  moveToPoint(24, 24, 1, 2000, false);
-  moveToPoint(48, 48, 1, 2000, true);
-  moveToPoint(24, 24, -1, 2000, true);
-  moveToPoint(0, 0, 1, 2000, true);
-  correct_angle = 0;
-  driveTo(24, 2000, false, 8);
-  turnToAngle(90, 800, false);
-  turnToAngle(180, 800, true);
+  
+  clawRotator.spin(fwd, 4, volt);
+  claw.spin(fwd, 5, volt);
+  //toggle 
+  toggle.spin(reverse, 9, volt);
+  while(toggleOptical.value() < 20 || toggleOptical.value() > 40)
+  {
+    vex::task::sleep(10);
+  }
+  wait(200, msec);
+  toggle.stop(hold);
+  lift.setVelocity(60, pct);
+  lift.spinToPosition(100, deg);
+  moveToPoint(-12, 9, 1, 2000, true);
+  lift.spin(fwd, -2, volt);
+  wait(500, msec);
+  lift.stop(hold);
+  clawRotator.spin(fwd, -4, volt);
+  claw.spin(fwd, 0, volt);
+  wait(500, msec);
+  moveToPoint(0, 7, -1, 2000, true);
+  turnToPoint(-24, 48, 1, 1000);
+  // moveToPoint(24, 24, 1, 2000, false);
+  // moveToPoint(48, 48, 1, 2000, true);
+  // moveToPoint(24, 24, -1, 2000, true);
+  // moveToPoint(0, 0, 1, 2000, true);
+  // correct_angle = 0;
+  // driveTo(24, 2000, false, 8);
+  // turnToAngle(90, 800, false);
+  // turnToAngle(180, 800, true);
+  
 }
 
 

@@ -20,11 +20,11 @@ controller controller_1 = controller(primary);
 
 motor left_chassis1 = motor(PORT11, ratio6_1, true);
 motor left_chassis2 = motor(PORT12, ratio6_1, true);
-motor_group left_chassis = motor_group(left_chassis1, left_chassis2);
+motor_group left_chassis = motor_group(left_chassis2, left_chassis1);
 
 motor right_chassis1 = motor(PORT8, ratio6_1, false);
 motor right_chassis2 = motor(PORT9, ratio6_1, false);
-motor_group right_chassis = motor_group(right_chassis1, right_chassis2);
+motor_group right_chassis = motor_group(right_chassis2, right_chassis1);
 
 motor liftL = motor(PORT1, ratio18_1, false);
 motor liftR = motor(PORT6, ratio18_1, true);
@@ -50,10 +50,10 @@ rotation vertical_tracker = rotation(PORT11, true);
 
 // Distance reset sensors
 // Set these to random ports if you are not using distance resets
-distance front_sensor = distance(PORT12);
-distance left_sensor = distance(PORT13);
-distance right_sensor = distance(PORT14);
-distance back_sensor = distance(PORT15);
+distance front_sensor = distance(PORT13);
+distance left_sensor = distance(PORT20);
+distance right_sensor = distance(PORT16);
+distance back_sensor = distance(PORT19);
 
 
 // ============================================================================
@@ -70,9 +70,9 @@ double wheel_distance_in = (36.0 / 48.0) * 2.75 * M_PI;
 // distance_* : Linear PID for straight driving
 // turn_*     : PID for turning in place
 // heading_correction_* : PID for heading correction during linear movement
-double distance_kp = 1.1, distance_ki = 0.1, distance_kd = 7;
-double turn_kp = 0.3, turn_ki = 0, turn_kd = 2.5;
-double heading_correction_kp = 0.6, heading_correction_ki = 0, heading_correction_kd = 4;
+double distance_kp = 1.3, distance_ki = 0.0, distance_kd = 7.5;
+double turn_kp = 0.5, turn_ki = 0, turn_kd = 2.6;
+double heading_correction_kp = 0.8, heading_correction_ki = 0, heading_correction_kd = 4;
 
 // Enable or disable the use of tracking wheels
 bool using_horizontal_tracker = false;  // Set to true if a horizontal tracking wheel is installed and used for odometry
@@ -96,17 +96,17 @@ double vertical_tracker_diameter = 1.975; // Diameter of the vertical tracker wh
 // double front_sensor_offsetY = 6.5;
 // For the X offset, a negative value indicates that the sensor is located on the left side of the robot, while a positive value indicates that it is on the right side. 
 
-double front_sensor_offsetX = 0.0; 
-double front_sensor_offsetY = 0.0;
+double front_sensor_offsetX = -5; 
+double front_sensor_offsetY = 3.8;
 
-double left_sensor_offsetX = 0.0; 
-double left_sensor_offsetY = 0.0;
+double left_sensor_offsetX = -5.5; 
+double left_sensor_offsetY = -2.5;
 
-double right_sensor_offsetX = 0.0;
-double right_sensor_offsetY = 0.0;
+double right_sensor_offsetX = 5.5;
+double right_sensor_offsetY = -3.5;
 
-double back_sensor_offsetX = 0.0;
-double back_sensor_offsetY = 0.0;
+double back_sensor_offsetX = -6.0;
+double back_sensor_offsetY = -7.0;
 
 // ============================================================================
 // ADVANCED TUNING (OPTIONAL)
@@ -116,7 +116,7 @@ bool heading_correction = true; // Use heading correction when the bot is statio
 
 // Set to true for more accuracy and smoothness, false for more speed
 bool dir_change_start = true;   // Less accel/decel due to expecting direction change at start of movement
-bool dir_change_end = true;     // Less accel/decel due to expecting direction change at end of movement
+bool dir_change_end = false;     // Less accel/decel due to expecting direction change at end of movement
 
 double min_output = 10; // Minimum output voltage to motors while chaining movements
 

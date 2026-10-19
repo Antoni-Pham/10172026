@@ -270,12 +270,12 @@ void subsystemLoop() {
 void startSubsystems() {
   if (subsystem_task_started) return;
 
-  liftL.setPosition(0.0, degrees);
-  liftR.setPosition(0.0, degrees);
+  // liftL.setPosition(0.0, degrees);
+  // liftR.setPosition(0.0, degrees);
   clawRotator.setPosition(0.0, degrees);
   toggleOptical.setLight(ledState::on);
   toggleOptical.setLightPower(100.0);
-  clawRotator.spinToPosition(claw_rotator_retract_degrees, degrees, false);
+  //clawRotator.spinToPosition(claw_rotator_retract_degrees, degrees, false);
 
   subsystem_task_started = true;
   subsystem_task = thread(subsystemLoop);
