@@ -129,7 +129,8 @@ void exampleAuton() {
 }
 
 void exampleAuton2() {
-  
+  resetPositionBack();
+  resetPositionLeft();
   clawRotator.spin(fwd, 4, volt);
   claw.spin(fwd, 5, volt);
   //toggle 
@@ -140,17 +141,34 @@ void exampleAuton2() {
   }
   wait(200, msec);
   toggle.stop(hold);
-  lift.setVelocity(60, pct);
+  lift.setVelocity(80, pct);
   lift.spinToPosition(100, deg);
-  moveToPoint(-12, 9, 1, 2000, true);
+  moveToPoint(-16, -53, 1, 1500, true);
   lift.spin(fwd, -2, volt);
-  wait(500, msec);
+  wait(300, msec);
   lift.stop(hold);
   clawRotator.spin(fwd, -4, volt);
   claw.spin(fwd, 0, volt);
+  wait(500, msec); 
+  moveToPoint(0, -58, -1, 2000, true);
   wait(500, msec);
-  moveToPoint(0, 7, -1, 2000, true);
-  turnToPoint(-24, 48, 1, 1000);
+  turnToPoint(-24, -24, 1, 1000);
+  claw.spin(fwd, 5, volt);
+  lift.spin(fwd, -2, volt);
+  moveToPoint(-23.5, -24, 1, 1450, false, 4);
+  clawRotator.spin(fwd, 4, volt);
+  lift.stop(hold);
+  wait(200, msec);
+  stopChassis(hold);
+  turnToPoint(-12, -48, 1, 2000);
+  lift.setVelocity(80, pct);
+  lift.spinToPosition(170, deg);
+  moveToPoint(-12, -48, 1, 2000);
+  lift.spin(fwd, -2, volt);
+  wait(300, msec);
+  lift.stop(hold);
+  clawRotator.spin(fwd, -4, volt);
+  claw.spin(fwd, 0, volt);
   // moveToPoint(24, 24, 1, 2000, false);
   // moveToPoint(48, 48, 1, 2000, true);
   // moveToPoint(24, 24, -1, 2000, true);

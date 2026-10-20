@@ -100,10 +100,10 @@ double front_sensor_offsetX = -5;
 double front_sensor_offsetY = 3.8;
 
 double left_sensor_offsetX = -5.5; 
-double left_sensor_offsetY = -2.5;
+double left_sensor_offsetY = 0.7;
 
 double right_sensor_offsetX = 5.5;
-double right_sensor_offsetY = -3.5;
+double right_sensor_offsetY = 1.0;
 
 double back_sensor_offsetX = -6.0;
 double back_sensor_offsetY = -7.0;
