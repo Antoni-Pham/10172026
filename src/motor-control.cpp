@@ -992,7 +992,7 @@ void turnToPoint(double x, double y, int direction, double time_limit_msec) {
     driveChassis(output, -output); // Apply output to chassis
     wait(10, msec);
   }  
-  logger.info("Odom: %.2f, %.2f, %.2f", x_pos, y_pos, getInertialHeading());
+  logger.info("Turn Odom: %.2f, %.2f, %.2f", x_pos, y_pos, getInertialHeading());
   logger.fatal("----------------------------");
   stopChassis(vex::hold); // Stop at end
   correct_angle = getInertialHeading(); // Update global heading
@@ -1128,7 +1128,7 @@ void moveToPoint(double x, double y, int dir, double time_limit_msec, bool exit,
     driveChassis(left_output, right_output); // Apply output to chassis
     wait(10, msec);
   }
-  logger.info("Odom: %.2f, %.2f, %.2f", x_pos, y_pos, getInertialHeading());
+  logger.info("Drive Odom: %.2f, %.2f, %.2f", x_pos, y_pos, getInertialHeading());
   logger.fatal("----------------------------");
   if(exit == true) {
     prev_left_output = 0;
@@ -1311,6 +1311,7 @@ void boomerang(double x, double y, int dir, double a, double dlead, double time_
  */
 void resetPositionWithSensor(vex::distance& sensor, double s_x, double s_y, double sensor_angle_offset, double field_half_size) {
     double sensorReading = sensor.objectDistance(inches);
+    printf("Sensor Reading: %f\n", sensorReading);
   
     if (sensorReading < 0 || sensorReading > 200) {
         return; // Don't reset if reading is clearly garbage

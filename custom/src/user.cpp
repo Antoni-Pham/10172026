@@ -101,25 +101,24 @@ void runDriver() {
     // updateDriverSubsystems(l2);
 
     if (Brain.timer(msec) > 500 && brainTimerOn && after1 == false) {
-      lift.spinToPosition(-8, degrees);
+      lift.spinToPosition(-8, degrees, false);
       after1 = true;
     }
     if (Brain.timer(msec) > 1500 && brainTimerOn && after2 == false) {
+      brainTimerOn = false;
+      after1 = false;
       lift.stop(hold);
       lift.setPosition(0, degrees);
       after2 = true;
     }
-    // Open Claw with L1, Close Claw with L2, Lift Down with R1, Lift Up with R2
-    if (controller_1.ButtonL1.pressing() && !l1) {
+    // Open Claw with L1, Close Claw with L1, Lift Down with R1, Lift Up with R2
+    if (controller_1.ButtonL1.pressing() && !l1 && clawState == 0) {
       l1 = true;
       clawRotator.spin(fwd, 4, volt);
       claw.spin(fwd, 5, volt);
       clawState = 1;
-    } else if (!controller_1.ButtonL1.pressing() && l1) {
-      l1 = false;
-    }
-    if (controller_1.ButtonL2.pressing() && !l2) {
-      l2 = true;
+    } else if (controller_1.ButtonL1.pressing() && !l1 && clawState == 1) {
+      l1 = true;
       clawRotator.spin(fwd, -4, volt);
       claw.spin(fwd, 0, volt);
       clawState = 0;
@@ -128,46 +127,60 @@ void runDriver() {
       brainTimerOn = true;
       after1 = false;
       after2 = false;
-    } else if (!controller_1.ButtonL2.pressing() && l2) {
-      l2 = false;
-      clawRotator.spin(fwd, -4, volt);
+    } else if (!controller_1.ButtonL1.pressing() && l1) {
+      l1 = false;
       claw.spin(fwd, 5, volt);
     }
-    if (controller_1.ButtonR1.pressing() && !r1) {
+    // if (controller_1.ButtonL1.pressing() && !l1 && clawState == 1) {
+    //   l1 = true;
+    //   clawRotator.spin(fwd, -4, volt);
+    //   claw.spin(fwd, 0, volt);
+    //   clawState = 0;
+    //   Brain.resetTimer();
+
+    //   brainTimerOn = true;
+    //   after1 = false;
+    //   after2 = false;
+    // } else if (!controller_1.ButtonL1.pressing() && l1) {
+    //   l1 = false;
+    //   clawRotator.spin(fwd, -4, volt);
+    //   claw.spin(fwd, 5, volt);
+    // }
+    if (controller_1.ButtonR1.pressing() && !r1 && after1 == false) {
       lift.spin(fwd, -4, volt);
       r1 = true;
     } else if (!controller_1.ButtonR1.pressing() && r1) {
       r1 = false;
     }
-    if (controller_1.ButtonR2.pressing() && !r2) {
+    if (controller_1.ButtonR2.pressing() && !r2 && after1 == false) {
       r2 = true;
       lift.spin(fwd, 10, volt);
     } else if (!controller_1.ButtonR2.pressing() && r2) {
       r2 = false;
     }
-    if (!controller_1.ButtonR1.pressing() && !controller_1.ButtonR2.pressing()) {
+    if (!controller_1.ButtonR1.pressing() && !controller_1.ButtonR2.pressing() && after1 == false) {
       lift.stop(hold);
     }
 
     // Toggle control: Button X = Toggle on/off. Hold it to override the toggle and run the motor. If the optical sensor detects the wrong color, it will stop the motor.
-    if(!controller_1.ButtonX.pressing() && buttonX){
-      buttonX = false;
-    } else if (controller_1.ButtonX.pressing() && !toggleOn && !buttonX) {
-      toggle.spin(reverse, 9, volt);
+    if(!controller_1.ButtonL2.pressing() && l2){
+      l2 = false;
+    } else if (controller_1.ButtonL2.pressing() && !toggleOn && !l2) {
+      toggle.spin(reverse, 12, volt);
       toggleOn = true;
-      buttonX = true;
-    } else if ((controller_1.ButtonX.pressing() && toggleOn && !buttonX)) {
+      l2 = true;
+    } else if ((controller_1.ButtonL2.pressing() && toggleOn && !l2)) {
       toggle.stop(hold);
       toggleOn = false;
-      buttonX = true;
-    } else if (toggleOptical.isNearObject() && toggleOptical.value() > 180 && toggleOptical.value() < 210 && toggleOn && selectedRollerColor == static_cast<int>(RollerColor::Blue) && !buttonX) {
+      l2 = true;
+    } else if (toggleOptical.isNearObject() && toggleOptical.value() > 180 && toggleOptical.value() < 210 && toggleOn && selectedRollerColor == static_cast<int>(RollerColor::Blue) && !l2) {
       toggle.stop(hold);
       toggleOn = false;
-      buttonX = false;
-    } else if (toggleOptical.isNearObject() && toggleOptical.value() > 0 && toggleOptical.value() < 30 && toggleOn && selectedRollerColor == static_cast<int>(RollerColor::Red) && !buttonX) {
+      l2 = false;
+    } else if (toggleOptical.isNearObject() && toggleOptical.value() > 0 && toggleOptical.value() < 30 && toggleOn && selectedRollerColor == static_cast<int>(RollerColor::Red) && !l2) {
       toggle.stop(hold);
       toggleOn = false;
-      buttonX = false;
+      l2 = false;
     }
     wait(15, msec);
     //red 0-30

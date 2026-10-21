@@ -39,7 +39,7 @@ motor_group claw = motor_group(clawL, clawR);
 
 inertial inertial_sensor = inertial(PORT7);
 optical toggleOptical = optical(PORT15);
-distance clawDetect = distance(PORT20);
+distance clawDetect = distance(PORT5);
 
 
 
@@ -61,7 +61,7 @@ distance back_sensor = distance(PORT19);
 // ============================================================================
 
 // Distance between the middles of the left and right wheels of the drive (in inches)
-double distance_between_wheels = 13;
+double distance_between_wheels = 11.25;
 
 // motor to wheel gear ratio * wheel diameter (in inches) * pi
 double wheel_distance_in = (36.0 / 48.0) * 2.75 * M_PI;
@@ -99,10 +99,10 @@ double vertical_tracker_diameter = 1.975; // Diameter of the vertical tracker wh
 double front_sensor_offsetX = -5; 
 double front_sensor_offsetY = 3.8;
 
-double left_sensor_offsetX = -5.5; 
+double left_sensor_offsetX = -6.0; 
 double left_sensor_offsetY = 0.7;
 
-double right_sensor_offsetX = 5.5;
+double right_sensor_offsetX = 5.75;
 double right_sensor_offsetY = 1.0;
 
 double back_sensor_offsetX = -6.0;
