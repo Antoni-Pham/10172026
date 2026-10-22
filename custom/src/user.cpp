@@ -104,7 +104,7 @@ void runDriver() {
       lift.spinToPosition(-8, degrees, false);
       after1 = true;
     }
-    if (Brain.timer(msec) > 1500 && brainTimerOn && after2 == false) {
+    if (Brain.timer(msec) > 2750 && brainTimerOn && after2 == false) {
       brainTimerOn = false;
       after1 = false;
       lift.stop(hold);
@@ -120,7 +120,7 @@ void runDriver() {
     } else if (controller_1.ButtonL1.pressing() && !l1 && clawState == 1) {
       l1 = true;
       clawRotator.spin(fwd, -4, volt);
-      claw.spin(fwd, 0, volt);
+      claw.spin(fwd, -5, volt);
       clawState = 0;
       Brain.resetTimer();
 

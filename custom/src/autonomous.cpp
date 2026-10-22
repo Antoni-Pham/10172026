@@ -129,16 +129,17 @@ void exampleAuton() {
 }
 
 void exampleAuton2() {
-  controller_1.Screen.clearScreen();
-  controller_1.Screen.setCursor(1,1);
-  while (true){
-     controller_1.Screen.clearScreen();
-    controller_1.Screen.print("Odom: %.2f, %.2f, %.2f", x_pos, y_pos, getInertialHeading());
-     controller_1.Screen.setCursor(1,1);
-    wait(300, msec);
-  }
-  // resetPositionBack();
-  // resetPositionLeft();
+  // controller_1.Screen.clearScreen();
+  // controller_1.Screen.setCursor(1,1);
+  // while (true){
+  //    controller_1.Screen.clearScreen();
+  //   controller_1.Screen.print("Odom: %.2f, %.2f, %.2f", x_pos, y_pos, getInertialHeading());
+  //    controller_1.Screen.setCursor(1,1);
+  //   wait(300, msec);
+  // }
+  // return;
+  resetPositionBack();
+  resetPositionLeft();
   x_pos = -4.25;
   y_pos = -62;
   clawRotator.spin(fwd, 4, volt);
@@ -154,22 +155,22 @@ void exampleAuton2() {
   lift.setVelocity(80, pct);
   lift.spinToPosition(90, deg);
   driveTo(10, 1000, true, 8);
-  turnToPoint(-24, -50, 1, 1000);
-  moveToPoint(-24, -50, 1, 1450, true, 4);
+  turnToPoint(-24, -46, 1, 1000);
+  moveToPoint(-24, -46, 1, 1450, true, 4);
   lift.spin(fwd, -2, volt);
   wait(300, msec);
   lift.stop(hold);
   clawRotator.spin(fwd, -4, volt);
   claw.spin(fwd, 0, volt);
   wait(200, msec);
-  driveTo(-15, 2000, false, 8);
-  wait(900, msec);
-  return;
-  turnToPoint(-24, -21, 1, 1000);
+  driveTo(-4, 500, false, 8);
+  moveToPoint(-3, -48, -1, 1000, true);
+  turnToPoint(-24, -24, 1, 1000);
   claw.spin(fwd, 5, volt);
   lift.spin(fwd, -2, volt);
-  driveTo(9, 1000, false, 8);
-  driveTo(1, 1000, false, 4);
+  driveTo(6, 1000, false, 8);
+  wait(500,msec);
+  driveTo(1, 1000, false, 6);
   while(clawDetect.value() > 90)
   {
     vex::task::sleep(10);
