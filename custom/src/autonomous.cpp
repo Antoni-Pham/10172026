@@ -282,7 +282,7 @@ void Pin3Quad2() {
   {
     vex::task::sleep(10);
   }
-  wait(200, msec);
+  wait(200, msec);;
   toggle.stop(hold);
   lift.setVelocity(80, pct);
   lift.spinToPosition(130 , deg, false);
