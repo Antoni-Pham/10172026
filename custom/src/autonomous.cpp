@@ -103,7 +103,50 @@ bool runMovementWhileWaitingForGamePiece(AutonomousMovement movement,
 }
 
 }  // namespace
+void WallAuton(){
+  x_pos = -4.25;
+  y_pos = -62;
+  clawRotator.spin(fwd, 4, volt);
+  claw.spin(fwd, 5, volt);
+  //toggle 
+  toggle.spin(reverse, 12, volt);
+  while(toggleOptical.value() < 5 || toggleOptical.value() > 45)
+  {
+    vex::task::sleep(10);
+  }
+  wait(200, msec);
+  toggle.stop(hold);
+  lift.setVelocity(80, pct);
+  driveTo(14, 1000, true, 8);
+  lift.spinToPosition(130, deg, false);
+  turnToPoint(-24, -47, 1, 1000);
+  moveToPoint(-24, -47, 1, 1450, true, 4);
+  lift.spin(fwd, -2, volt);
+  wait(300, msec);
+  lift.stop(hold);
+  clawRotator.spin(fwd, -4, volt);
+  claw.spin(fwd, 0, volt);
+  wait(200, msec);
+  driveTo(-10, 1000, true, 10);
+  clawRotator.spin(fwd, 4, volt);
+  claw.spin(fwd, 5, volt);
+  lift.spin(fwd, -2, volt);
+  turnToPoint(-24, -68, 1, 1000);
+  driveTo(10, 1500, false, 10);
+   while(clawDetect.value() > 90 && Brain.timer(msec) < 700)
+  {
+    vex::task::sleep(10);
+  }
 
+
+  
+
+
+  
+
+
+
+}
 void exampleAuton() {
   DriveMovement first_approach = {24, 2000};
   PointMovement second_approach = {18, 18, 1, 2000, false, 8, false};
@@ -127,8 +170,101 @@ void exampleAuton() {
   wait(1000, msec);
   driveTo(-42, 3000);
 }
-
 void exampleAuton2() {
+
+}
+void Pin3Quad1() {
+  x_pos = 4.25;
+  y_pos = -62;
+  clawRotator.spin(fwd, 4, volt);
+  claw.spin(fwd, 5, volt);
+  //toggle 
+  toggle.spin(reverse, 12, volt);
+  while(toggleOptical.value() < 5 || toggleOptical.value() > 45)
+  {
+    vex::task::sleep(10);
+  }
+  wait(200, msec);
+  toggle.stop(hold);
+  lift.setVelocity(80, pct);
+  driveTo(8, 1000, true, 8);
+  lift.spinToPosition(130, deg, false);
+  turnToPoint(24, -47, 1, 1000);
+  moveToPoint(24, -47, 1, 1450, true, 4);
+  lift.spin(fwd, -2, volt);
+  wait(300, msec);
+  lift.stop(hold);
+  clawRotator.spin(fwd, -4, volt);
+  claw.spin(fwd, 0, volt);
+  wait(200, msec);
+  driveTo(-4, 500, false, 8);
+  moveToPoint(6.5, -52, -1, 1000, true);
+  turnToPoint(24, -28, 1, 1000);
+  claw.spin(fwd, 5, volt);
+  lift.spin(fwd, -2, volt);
+  driveTo(2.5, 1000, false, 8);
+  wait(500,msec);
+  driveTo(1, 1000, false, 4);
+  Brain.resetTimer();
+  while(clawDetect.value() > 90 && Brain.timer(msec) < 700)
+  {
+    vex::task::sleep(10);
+  }
+  //driveTo(-1, 100, false, 6);
+  //moveToPoint(-23.5, -24, 1, 1450, false, 4);
+  //Finish Grabbing Game Piece
+  clawRotator.spin(fwd, 4, volt);
+  lift.stop(hold);
+  wait(200, msec);
+  stopChassis(hold);
+  wait(100, msec);
+  //turnToPoint(-24, -48, 1, 2000);
+  turnToAngle(185, 800);
+  lift.setVelocity(80, pct);
+  lift.spinToPosition(170, deg, false);
+  //moveToPoint(-24, -48, 1, 1100, true, 4);
+  driveTo(80, 950, false, 4);
+  lift.spin(fwd, -2, volt);
+  wait(400, msec);
+  lift.stop(hold);
+  stopChassis(brake);
+  clawRotator.spin(fwd, -4, volt);
+  claw.spin(fwd, 0, volt);
+  //Finish Stacking Game Piece
+  // resetPositionFront();
+  // resetPositionRight();
+  driveTo(-13.5, 1500, true, 8);
+  turnToPoint(47, -50, 1, 1000);
+  claw.spin(fwd, 5, volt);
+  lift.spin(fwd, -2, volt);
+  moveToPoint(33.6, -39, 1, 1450, false, 8);
+  turnToPoint(47, -50, 1, 300);
+  driveTo(1, 1000, false, 4);
+  Brain.resetTimer();
+  while(clawDetect.value() > 90 && Brain.timer(msec) < 700)
+  {
+    vex::task::sleep(10);
+  }
+  //moveToPoint(-23.5, -24, 1, 1450, false, 4);
+  clawRotator.spin(fwd, 4, volt);
+  lift.stop(hold);
+  wait(200, msec);
+  stopChassis(hold);
+  wait(400, msec);
+  turnToAngle(99, 700);
+  lift.setVelocity(80, pct);
+  lift.spinToPosition(260, deg, false);
+  //moveToPoint(-24, -48, 1, 1100, true, 4);
+  driveTo(80, 1000, false, 4);
+  lift.spin(fwd, -2, volt);
+  wait(300, msec);
+  stopChassis(brake);
+  lift.stop(hold);
+  clawRotator.spin(fwd, -4, volt);
+  claw.spin(fwd, 0, volt);
+  //Finish Stacking Game Piece
+}
+void Pin3Quad2() {
   // controller_1.Screen.clearScreen();
   // controller_1.Screen.setCursor(1,1);
   // while (true){
@@ -191,7 +327,7 @@ void exampleAuton2() {
   //moveToPoint(-24, -48, 1, 1100, true, 4);
   driveTo(80, 950, false, 4);
   lift.spin(fwd, -2, volt);
-  wait(300, msec);
+  wait(400, msec);
   lift.stop(hold);
   stopChassis(brake);
   clawRotator.spin(fwd, -4, volt);

@@ -14,10 +14,10 @@ void runAutonomous() {
   //updateDriverSubsystems(false);
   switch(auton_selected) {
     case 1:
-      exampleAuton2();
+      Pin3Quad1();
       break;
     case 2:
-      //exampleAuton2();
+      WallAuton();
       break;  
     case 3:
       //redGoalRush();
@@ -122,7 +122,7 @@ void runDriver() {
     } else if (controller_1.ButtonL1.pressing() && !l1 && clawState == 1) {
       l1 = true;
       clawRotator.spin(fwd, -4, volt);
-      claw.spin(fwd, -5, volt);
+      claw.stop(coast);
       clawState = 0;
       Brain.resetTimer();
 
