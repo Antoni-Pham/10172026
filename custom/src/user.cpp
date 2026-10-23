@@ -86,7 +86,9 @@ void runDriver() {
   bool after1 = false;
   bool after2 = false;
   Brain.resetTimer();
-
+  lift.setVelocity(12, percent);
+  lift.spin(reverse);
+  wait(400, msec);
   while (true) {
     // [-100, 100] for controller stick axis values
     ch1 = controller_1.Axis1.value();
