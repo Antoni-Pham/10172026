@@ -115,7 +115,7 @@ double back_sensor_offsetY = -7.0;
 bool heading_correction = true; // Use heading correction when the bot is stationary
 
 // Set to true for more accuracy and smoothness, false for more speed
-bool dir_change_start = true;   // Less accel/decel due to expecting direction change at start of movement
+bool dir_change_start = false;   // Less accel/decel due to expecting direction change at start of movement
 bool dir_change_end = false;     // Less accel/decel due to expecting direction change at end of movement
 
 double min_output = 10; // Minimum output voltage to motors while chaining movements
