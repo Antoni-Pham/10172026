@@ -86,7 +86,7 @@ void runDriver() {
   bool after1 = false;
   bool after2 = false;
   Brain.resetTimer();
-  lift.setVelocity(12, percent);
+  lift.setVelocity(100, percent);
   lift.spin(reverse);
   wait(400, msec);
   while (true) {
@@ -103,7 +103,7 @@ void runDriver() {
     // updateDriverSubsystems(l2);
 
     if (Brain.timer(msec) > 500 && brainTimerOn && after1 == false) {
-      lift.setVelocity(45, percent);
+      lift.setVelocity(85, percent);
       lift.spinToPosition(-8, degrees, false);
       after1 = true;
     }
@@ -150,14 +150,14 @@ void runDriver() {
     //   claw.spin(fwd, 5, volt);
     // }
     if (controller_1.ButtonR1.pressing() && !r1 && after1 == false) {
-      lift.spin(fwd, -4, volt);
+      lift.spin(fwd, -8, volt);
       r1 = true;
     } else if (!controller_1.ButtonR1.pressing() && r1) {
       r1 = false;
     }
     if (controller_1.ButtonR2.pressing() && !r2 && after1 == false) {
       r2 = true;
-      lift.spin(fwd, 10, volt);
+      lift.spin(fwd, 12, volt);
     } else if (!controller_1.ButtonR2.pressing() && r2) {
       r2 = false;
     }

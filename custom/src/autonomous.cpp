@@ -174,7 +174,7 @@ void exampleAuton2() {
 
 }
 void Pin3Quad1() {
-  x_pos = 4.25;
+ x_pos = 4.25;
   y_pos = -62;
   clawRotator.spin(fwd, 4, volt);
   claw.spin(fwd, 5, volt);
@@ -188,9 +188,9 @@ void Pin3Quad1() {
   toggle.stop(hold);
   lift.setVelocity(80, pct);
   driveTo(8, 1000, true, 8);
-  lift.spinToPosition(130, deg, false);
+  lift.spinToPosition(100 , deg, false);
   turnToPoint(24, -47, 1, 1000);
-  moveToPoint(24, -47, 1, 1450, true, 4);
+  moveToPoint(24, -47, 1, 1250, true, 6);
   lift.spin(fwd, -2, volt);
   wait(300, msec);
   lift.stop(hold);
@@ -199,7 +199,7 @@ void Pin3Quad1() {
   wait(200, msec);
   driveTo(-4, 500, false, 8);
   moveToPoint(6.5, -52, -1, 1000, true);
-  turnToPoint(24, -28, 1, 1000);
+  turnToPoint(24, -30, 1, 1000);
   claw.spin(fwd, 5, volt);
   lift.spin(fwd, -2, volt);
   driveTo(2.5, 1000, false, 8);
@@ -219,16 +219,16 @@ void Pin3Quad1() {
   stopChassis(hold);
   wait(100, msec);
   //turnToPoint(-24, -48, 1, 2000);
-  turnToAngle(185, 800);
+  turnToAngle(-185, 800);
   lift.setVelocity(80, pct);
-  lift.spinToPosition(170, deg, false);
+  lift.spinToPosition(190, deg, false);
   //moveToPoint(-24, -48, 1, 1100, true, 4);
   driveTo(80, 950, false, 4);
-  lift.spin(fwd, -2, volt);
+  lift.spin(fwd, -4, volt);
   wait(400, msec);
   lift.stop(hold);
   stopChassis(brake);
-  clawRotator.spin(fwd, -4, volt);
+  clawRotator.spin(fwd, -4, volt);  
   claw.spin(fwd, 0, volt);
   //Finish Stacking Game Piece
   // resetPositionFront();
@@ -236,10 +236,10 @@ void Pin3Quad1() {
   driveTo(-13.5, 1500, true, 8);
   turnToPoint(47, -50, 1, 1000);
   claw.spin(fwd, 5, volt);
-  lift.spin(fwd, -2, volt);
-  moveToPoint(33.6, -39, 1, 1450, false, 8);
-  turnToPoint(47, -50, 1, 300);
-  driveTo(1, 1000, false, 4);
+  lift.spin(fwd, -4, volt);
+  moveToPoint(35.5, -39, 1, 1450, false, 8);
+  turnToPoint(48, -50, 1, 300);
+  driveTo(1, 1000, false, 6);
   Brain.resetTimer();
   while(clawDetect.value() > 90 && Brain.timer(msec) < 700)
   {
@@ -251,12 +251,12 @@ void Pin3Quad1() {
   wait(200, msec);
   stopChassis(hold);
   wait(400, msec);
-  turnToAngle(99, 700);
+  turnToAngle(-99, 700);
   lift.setVelocity(80, pct);
-  lift.spinToPosition(260, deg, false);
+  lift.spinToPosition(300, deg, false);
   //moveToPoint(-24, -48, 1, 1100, true, 4);
   driveTo(80, 1000, false, 4);
-  lift.spin(fwd, -2, volt);
+  lift.spin(fwd, -4, volt);
   wait(300, msec);
   stopChassis(brake);
   lift.stop(hold);
@@ -289,21 +289,21 @@ void Pin3Quad2() {
   wait(200, msec);
   toggle.stop(hold);
   lift.setVelocity(80, pct);
-  driveTo(8, 1000, true, 8);
-  lift.spinToPosition(130, deg, false);
-  turnToPoint(-24, -47, 1, 1000);
-  moveToPoint(-24, -47, 1, 1450, true, 4);
+  lift.spinToPosition(110 , deg, false);
+  turnToPoint(-24, -47, 1, 500);
+  moveToPoint(-24, -47, 1, 1250, false, 6);
+  driveChassis(1,1);
   lift.spin(fwd, -2, volt);
   wait(300, msec);
   lift.stop(hold);
   clawRotator.spin(fwd, -4, volt);
   claw.spin(fwd, 0, volt);
   wait(200, msec);
-  driveTo(-4, 500, false, 8);
   moveToPoint(-6.5, -52, -1, 1000, true);
-  turnToPoint(-24, -28, 1, 1000);
+  turnToPoint(-24, -30, 1, 1000);
   claw.spin(fwd, 5, volt);
   lift.spin(fwd, -2, volt);
+  /*
   driveTo(2.5, 1000, false, 8);
   wait(500,msec);
   driveTo(1, 1000, false, 4);
@@ -323,14 +323,14 @@ void Pin3Quad2() {
   //turnToPoint(-24, -48, 1, 2000);
   turnToAngle(185, 800);
   lift.setVelocity(80, pct);
-  lift.spinToPosition(170, deg, false);
+  lift.spinToPosition(190, deg, false);
   //moveToPoint(-24, -48, 1, 1100, true, 4);
   driveTo(80, 950, false, 4);
-  lift.spin(fwd, -2, volt);
+  lift.spin(fwd, -4, volt);
   wait(400, msec);
   lift.stop(hold);
   stopChassis(brake);
-  clawRotator.spin(fwd, -4, volt);
+  clawRotator.spin(fwd, -4, volt);  
   claw.spin(fwd, 0, volt);
   //Finish Stacking Game Piece
   // resetPositionFront();
@@ -338,10 +338,10 @@ void Pin3Quad2() {
   driveTo(-13.5, 1500, true, 8);
   turnToPoint(-47, -50, 1, 1000);
   claw.spin(fwd, 5, volt);
-  lift.spin(fwd, -2, volt);
-  moveToPoint(-33.6, -39, 1, 1450, false, 8);
-  turnToPoint(-47, -50, 1, 300);
-  driveTo(1, 1000, false, 4);
+  lift.spin(fwd, -4, volt);
+  moveToPoint(-35.5, -39, 1, 1450, false, 8);
+  turnToPoint(-48, -50, 1, 300);
+  driveTo(1, 1000, false, 6);
   Brain.resetTimer();
   while(clawDetect.value() > 90 && Brain.timer(msec) < 700)
   {
@@ -355,10 +355,10 @@ void Pin3Quad2() {
   wait(400, msec);
   turnToAngle(99, 700);
   lift.setVelocity(80, pct);
-  lift.spinToPosition(260, deg, false);
+  lift.spinToPosition(300, deg, false);
   //moveToPoint(-24, -48, 1, 1100, true, 4);
   driveTo(80, 1000, false, 4);
-  lift.spin(fwd, -2, volt);
+  lift.spin(fwd, -4, volt);
   wait(300, msec);
   stopChassis(brake);
   lift.stop(hold);
@@ -371,8 +371,9 @@ void Pin3Quad2() {
   // moveToPoint(0, 0, 1, 2000, true);
   // correct_angle = 0;
   // driveTo(24, 2000, false, 8);
-  // turnToAngle(90, 800, false);
+  // turnToAngle(90, 800,      false);
   // turnToAngle(180, 800, true);
+  */
   
 }
 
