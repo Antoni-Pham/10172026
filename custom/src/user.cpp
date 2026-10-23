@@ -14,7 +14,7 @@ void runAutonomous() {
   //updateDriverSubsystems(false);
   switch(auton_selected) {
     case 1:
-      Pin3Quad1();
+      Pin3Quad2();
       break;
     case 2:
       WallAuton();
@@ -103,10 +103,11 @@ void runDriver() {
     // updateDriverSubsystems(l2);
 
     if (Brain.timer(msec) > 500 && brainTimerOn && after1 == false) {
+      lift.setVelocity(45, percent);
       lift.spinToPosition(-8, degrees, false);
       after1 = true;
     }
-    if (Brain.timer(msec) > 2750 && brainTimerOn && after2 == false) {
+    if (Brain.timer(msec) > 1800 && brainTimerOn && after2 == false) {
       brainTimerOn = false;
       after1 = false;
       lift.stop(hold);
