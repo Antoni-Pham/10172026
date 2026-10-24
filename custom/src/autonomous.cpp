@@ -169,7 +169,15 @@ void exampleAuton() {
   driveTo(-42, 3000);
 }
 void exampleAuton2() {
-
+  x_pos = 0;
+  y_pos = 0;
+  moveToPoint(24, 24, 1, 2000, true);
+  wait(1000, msec);
+  moveToPoint(0, 0, -1, 2000, true);
+  wait(1000, msec);
+   moveToPoint(0, 24, 1, 2000, true);
+  wait(1000, msec);
+  moveToPoint(0, 0, -1, 2000, true);
 }
 void Pin3Quad1() {
  x_pos = 4.25;
@@ -187,8 +195,8 @@ void Pin3Quad1() {
   lift.setVelocity(80, pct);
   driveTo(8, 1000, true, 8);
   lift.spinToPosition(100 , deg, false);
-  turnToPoint(24, -47, 1, 1000);
-  moveToPoint(24, -47, 1, 1250, true, 6);
+  turnToPoint(24, -49, 1, 1000);
+  moveToPoint(24, -49, 1, 1250, true, 6);
   lift.spin(fwd, -2, volt);
   wait(300, msec);
   lift.stop(hold);
@@ -275,7 +283,7 @@ void Pin3Quad2() {
   x_pos = -4.25;
   y_pos = -62;
   clawRotator.spin(fwd, 4, volt);
-  claw.spin(fwd, 5, volt);
+  //claw.spin(fwd, 5, volt);
   //toggle 
   toggle.spin(reverse, 12, volt);
   while(toggleOptical.value() < 5 || toggleOptical.value() > 45)
@@ -285,24 +293,26 @@ void Pin3Quad2() {
   wait(200, msec);;
   toggle.stop(hold);
   lift.setVelocity(60, pct);
-  lift.spinToPosition(118 , deg, false);
-  turnToPoint(-25, -44, 1, 500);
-  moveToPoint(-25, -44, 1, 800, false, 6);
+  lift.spinToPosition(125 , deg, false);
+  wait(200,msec);
+  turnToPoint(-27, -47, 1, 500);
+  moveToPoint(-27, -47, 1, 950, false, 6);
   driveChassis(5,5);
   lift.spin(fwd, -3, volt);
-  vex::wait(300, msec);
+  vex::wait(450, msec);
   lift.stop(hold);
   clawRotator.spin(fwd, -4, volt);
-  claw.spin(fwd, -1, volt);
-  vex::wait(200, msec);
+  claw.spin(fwd, 3, volt);
+  vex::wait(350, msec);
+  //lift.spinToPosition(128 , deg, true);
   moveToPoint(-5, -52, -1, 1000, true, 10);
-  turnToPoint(-18, -37, 1, 800);
-  claw.spin(fwd, 5, volt);
   lift.spin(fwd, -2, volt);
-  moveToPoint(-18,-37,1,1000,true,8);
+  turnToPoint(-15, -40, 1, 800);
+  claw.spin(fwd, 5, volt);
+  moveToPoint(-15, -40, 1, 2000, true, 8);
   driveChassis(4,4);
   Brain.resetTimer();
-  while(clawDetect.value() > 90 && Brain.timer(msec) < 700){
+  while(clawDetect.value() > 90 && Brain.timer(msec) < 500){
     vex::task::sleep(10);
   }
   wait(200, msec);
@@ -318,92 +328,54 @@ void Pin3Quad2() {
   // lift.setVelocity(80, pct);
   // lift.spinToPosition(190, deg, false);
   //   return 0; });
-      driveToHeading(26, -180, 1600, false, 10);
+  turnToPoint(-23, -49, 1, 900);
+  moveToPoint(-23, -49, 1, 950, true, 6);
   //moveToPoint(-40,-20,1,1000,false,8);
-  driveChassis(1,1);
+  driveChassis(4,4);
+  wait(400,msec);
   lift.spin(fwd, -4, volt);
   wait(400, msec);
   lift.stop(hold);
   stopChassis(brake);
   clawRotator.spin(fwd, -4, volt);  
   claw.spin(fwd, 0, volt);
-  moveToPoint(-26, -35, -1, 1000, true, 8);
-  turnToPoint(-44, -56, 1, 800);
+//Go grab 3rd Pin
+  moveToPoint(-23, -30, -1, 1000, true, 8);
+  turnToPoint(-35, -44, 1, 800);
   claw.spin(fwd, 5, volt);
   lift.spin(fwd, -3, volt);
-  moveToPoint(-44, -56, 1, 800, true, 8);
+  moveToPoint(-35, -44, 1, 2000, false, 8);
+  turnToPoint(-47, -56, 1, 800);
   driveChassis(4, 4);
   Brain.resetTimer();
   while (clawDetect.value() > 90 && Brain.timer(msec) < 700){
     vex::task::sleep(10);
   }
-  wait(200, msec);
+  wait(550, msec);
   clawRotator.spin(fwd, 4, volt);
-
-  /**
   //driveTo(-1, 100, false, 6);
   //moveToPoint(-23.5, -24, 1, 1450, false, 4);
   //Finish Grabbing Game Piece
-  clawRotator.spin(fwd, 4, volt);
+  claw.spin(fwd, 4, volt);
   lift.stop(hold);
-  wait(200, msec);
   stopChassis(hold);
-  wait(100, msec);
-  //turnToPoint(-24, -48, 1, 2000);
-  turnToAngle(185, 800);
   lift.setVelocity(80, pct);
-  lift.spinToPosition(190, deg, false);
+  lift.spinToPosition(310, deg, false);
+  turnToPoint(0, -54, 1, 2000);
+  //turnToAngle(185, 800);
   //moveToPoint(-24, -48, 1, 1100, true, 4);
-  driveTo(80, 950, false, 4);
+  driveTo(80, 600, false, 8);
+  driveTo(80, 100, false, 4);
   lift.spin(fwd, -4, volt);
-  wait(400, msec);
+  wait(500, msec);
   lift.stop(hold);
   stopChassis(brake);
   clawRotator.spin(fwd, -4, volt);  
   claw.spin(fwd, 0, volt);
   //Finish Stacking Game Piece
-  // resetPositionFront();
-  // resetPositionRight();
-  driveTo(-13.5, 1500, true, 8);
-  turnToPoint(-47, -50, 1, 1000);
-  claw.spin(fwd, 5, volt);
-  lift.spin(fwd, -4, volt);
-  moveToPoint(-35.5, -39, 1, 1450, false, 8);
-  turnToPoint(-48, -50, 1, 300);
-  driveTo(1, 1000, false, 6);
-  Brain.resetTimer();
-  while(clawDetect.value() > 90 && Brain.timer(msec) < 700)
-  {
-    vex::task::sleep(10);
-  }
-  //moveToPoint(-23.5, -24, 1, 1450, false, 4);
-  clawRotator.spin(fwd, 4, volt);
-  lift.stop(hold);
-  wait(200, msec);
-  stopChassis(hold);
-  wait(400, msec);
-  turnToAngle(99, 700);
-  lift.setVelocity(80, pct);
-  lift.spinToPosition(300, deg, false);
-  //moveToPoint(-24, -48, 1, 1100, true, 4);
-  driveTo(80, 1000, false, 4);
-  lift.spin(fwd, -4, volt);
-  wait(300, msec);
-  stopChassis(brake);
-  lift.stop(hold);
-  clawRotator.spin(fwd, -4, volt);
-  claw.spin(fwd, 0, volt);
-  //Finish Stacking Game Piece
-  // moveToPoint(24, 24, 1, 2000, false);
-  // moveToPoint(48, 48, 1, 2000, true);
-  // moveToPoint(24, 24, -1, 2000, true);
-  // moveToPoint(0, 0, 1, 2000, true);
-  // correct_angle = 0;
-  // driveTo(24, 2000, false, 8);
-  // turnToAngle(90, 800,      false);
-  // turnToAngle(180, 800, true);
-  */
-  
+
+
+
 }
 
 

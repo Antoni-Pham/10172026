@@ -1244,7 +1244,7 @@ void moveToPoint(double x, double y, int dir, double time_limit_msec, bool exit,
     driveChassis(left_output, right_output); // Apply output to chassis
     wait(10, msec);
   }
-  logger.info("Drive Odom: %.2f, %.2f, %.2f", x_pos, y_pos, getInertialHeading());
+  logger.info("Drive Odom Complete: Target (%.2f, %.2f); Actual (%.2f, %.2f), Heading %.2f", x, y, x_pos, y_pos, getInertialHeading());
   logger.fatal("----------------------------");
   if(exit == true) {
     prev_left_output = 0;

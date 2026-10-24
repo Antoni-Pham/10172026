@@ -12,12 +12,13 @@ competition Competition;
 void runAutonomous() {
   //startSubsystems();
   //updateDriverSubsystems(false);
+  lift.setPosition(5, degrees);
   switch(auton_selected) {
     case 1:
       Pin3Quad2();
       break;
     case 2:
-      WallAuton();
+      exampleAuton2();
       break;  
     case 3:
       //redGoalRush();
@@ -87,8 +88,6 @@ void runDriver() {
   bool after2 = false;
   Brain.resetTimer();
   lift.setVelocity(100, percent);
-  lift.spin(reverse);
-  wait(400, msec);
   while (true) {
     // [-100, 100] for controller stick axis values
     ch1 = controller_1.Axis1.value();
@@ -97,7 +96,7 @@ void runDriver() {
     ch4 = controller_1.Axis4.value();
 
     // default tank drive or replace it with your preferred driver code here: 
-    driveChassis(ch3 * 0.04 + ch1 * 0.04, ch3 * 0.04 - ch1 * 0.04);
+    driveChassis(ch3 * 0.08 + ch1 * 0.08, ch3 * 0.08 - ch1 * 0.08);
 
     // To be re-incorporated to aid driver with auton functions
     // updateDriverSubsystems(l2);
@@ -150,7 +149,7 @@ void runDriver() {
     //   claw.spin(fwd, 5, volt);
     // }
     if (controller_1.ButtonR1.pressing() && !r1 && after1 == false) {
-      lift.spin(fwd, -8, volt);
+      lift.spin(fwd, -4, volt);
       r1 = true;
     } else if (!controller_1.ButtonR1.pressing() && r1) {
       r1 = false;
