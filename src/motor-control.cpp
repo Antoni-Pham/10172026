@@ -242,6 +242,122 @@ void turnToAngle(double turn_angle, double time_limit_msec, bool exit, double ma
  * - exit: If true, stops the robot at the end; if false, allows chaining.
  * - max_output: Maximum voltage output to motors.
  */
+
+void driveToHeading(double distance_in, double target_angl, double time_limit_msec, bool exit, double max_output){
+  // Store initial encoder values
+  logger.info("Starting drive to distance: %f", distance_in);
+  double start_left = getLeftRotationDegree(), start_right = getRightRotationDegree();
+  stopChassis(vex::brakeType::coast);
+  is_turning = true;
+  double threshold = 0.5;
+  int drive_direction = distance_in > 0 ? 1 : -1;
+  double max_slew_fwd = drive_direction > 0 ? max_slew_accel_fwd : max_slew_decel_rev;
+  double max_slew_rev = drive_direction > 0 ? max_slew_decel_fwd : max_slew_accel_rev;
+  bool min_speed = false;
+  if (!exit)
+  {
+    // Adjust slew rates and min speed for chaining
+    if (!dir_change_start && dir_change_end)
+    {
+      max_slew_fwd = drive_direction > 0 ? 24 : max_slew_decel_rev;
+      max_slew_rev = drive_direction > 0 ? max_slew_decel_fwd : 24;
+    }
+    if (dir_change_start && !dir_change_end)
+    {
+      max_slew_fwd = drive_direction > 0 ? max_slew_accel_fwd : 24;
+      max_slew_rev = drive_direction > 0 ? 24 : max_slew_accel_rev;
+      min_speed = true;
+    }
+    if (!dir_change_start && !dir_change_end)
+    {
+      max_slew_fwd = 24;
+      max_slew_rev = 24;
+      min_speed = true;
+    }
+  }
+
+  distance_in = distance_in * drive_direction;
+  PID pid_distance = PID(distance_kp, distance_ki, distance_kd);
+  PID pid_heading = PID(heading_correction_kp, heading_correction_ki, heading_correction_kd);
+
+  // Configure PID controllers
+  pid_distance.setTarget(distance_in);
+  pid_distance.setIntegralMax(3);
+  pid_distance.setSmallBigErrorTolerance(threshold, threshold * 3);
+  pid_distance.setSmallBigErrorDuration(50, 250);
+  pid_distance.setDerivativeTolerance(5);
+
+  pid_heading.setTarget(normalizeTarget(target_angl));
+  pid_heading.setIntegralMax(0);
+  pid_heading.setIntegralRange(1);
+  pid_heading.setSmallBigErrorTolerance(0, 0);
+  pid_heading.setSmallBigErrorDuration(0, 0);
+  pid_heading.setDerivativeTolerance(0);
+  pid_heading.setArrive(false);
+
+  double start_time = Brain.timer(msec);
+  double left_output = 0, right_output = 0, correction_output = 0;
+  double current_distance = 0, current_angle = 0;
+
+  // Main PID loop for driving straight
+  while (((!pid_distance.targetArrived()) && Brain.timer(msec) - start_time <= time_limit_msec && exit) || (exit == false && current_distance < distance_in && Brain.timer(msec) - start_time <= time_limit_msec))
+  {
+    // Calculate current distance and heading
+    current_distance = (fabs(((getLeftRotationDegree() - start_left) / 360.0) * wheel_distance_in) + fabs(((getRightRotationDegree() - start_right) / 360.0) * wheel_distance_in)) / 2;
+    current_angle = getInertialHeading();
+    left_output = pid_distance.update(current_distance) * drive_direction;
+    right_output = left_output;
+    correction_output = pid_heading.update(current_angle);
+
+    // Minimum Output Check
+    if (min_speed)
+    {
+      scaleToMin(left_output, right_output, min_output);
+    }
+    if (!exit)
+    {
+      left_output = 24 * drive_direction;
+      right_output = 24 * drive_direction;
+    }
+
+    left_output += correction_output;
+    right_output -= correction_output;
+
+    // Max Output Check
+    scaleToMax(left_output, right_output, max_output);
+
+    // Max Acceleration/Deceleration Check
+    if (prev_left_output - left_output > max_slew_rev)
+    {
+      left_output = prev_left_output - max_slew_rev;
+    }
+    if (prev_right_output - right_output > max_slew_rev)
+    {
+      right_output = prev_right_output - max_slew_rev;
+    }
+    if (left_output - prev_left_output > max_slew_fwd)
+    {
+      left_output = prev_left_output + max_slew_fwd;
+    }
+    if (right_output - prev_right_output > max_slew_fwd)
+    {
+      right_output = prev_right_output + max_slew_fwd;
+    }
+    prev_left_output = left_output;
+    prev_right_output = right_output;
+    driveChassis(left_output, right_output);
+    wait(10, msec);
+  }
+  logger.info("Odom: %.2f, %.2f, %.2f", x_pos, y_pos, getInertialHeading());
+  logger.fatal("----------------------------");
+  if (exit)
+  {
+    prev_left_output = 0;
+    prev_right_output = 0;
+    stopChassis(vex::hold);
+  }
+  is_turning = false;
+}
 void driveTo(double distance_in, double time_limit_msec, bool exit, double max_output) {
   // Store initial encoder values
   logger.info("Starting drive to distance: %f", distance_in);

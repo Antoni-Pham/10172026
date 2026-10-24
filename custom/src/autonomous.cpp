@@ -284,16 +284,16 @@ void Pin3Quad2() {
   }
   wait(200, msec);;
   toggle.stop(hold);
-  lift.setVelocity(80, pct);
-  lift.spinToPosition(130 , deg, false);
-  turnToPoint(-24, -47, 1, 500);
-  moveToPoint(-24, -47, 1, 800, false, 6);
-  driveChassis(1,1);
-  lift.spin(fwd, -2, volt);
+  lift.setVelocity(60, pct);
+  lift.spinToPosition(118 , deg, false);
+  turnToPoint(-25, -44, 1, 500);
+  moveToPoint(-25, -44, 1, 800, false, 6);
+  driveChassis(5,5);
+  lift.spin(fwd, -3, volt);
   vex::wait(300, msec);
   lift.stop(hold);
   clawRotator.spin(fwd, -4, volt);
-  claw.spin(fwd, 0, volt);
+  claw.spin(fwd, -1, volt);
   vex::wait(200, msec);
   moveToPoint(-5, -52, -1, 1000, true, 10);
   turnToPoint(-18, -37, 1, 800);
@@ -305,24 +305,41 @@ void Pin3Quad2() {
   while(clawDetect.value() > 90 && Brain.timer(msec) < 700){
     vex::task::sleep(10);
   }
-  wait(200,msec);
+  wait(200, msec);
   clawRotator.spin(fwd, 4, volt);
   lift.stop(hold);
   lift.setVelocity(80, pct);
   lift.spinToPosition(190, deg, false);
-  turnToPoint(-20, -40, 1, 1000);
-  moveToPoint(-20,-40,1,1000,false,8);
-  driveChassis(4,4);
-  wait(200,msec);
+  // vex::thread([]
+  //             {
+  //   wait(200,msec);
+  // clawRotator.spin(fwd, 4, volt);
+  // lift.stop(hold);
+  // lift.setVelocity(80, pct);
+  // lift.spinToPosition(190, deg, false);
+  //   return 0; });
+      driveToHeading(26, -180, 1600, false, 10);
+  //moveToPoint(-40,-20,1,1000,false,8);
+  driveChassis(1,1);
   lift.spin(fwd, -4, volt);
   wait(400, msec);
   lift.stop(hold);
   stopChassis(brake);
   clawRotator.spin(fwd, -4, volt);  
   claw.spin(fwd, 0, volt);
-  
+  moveToPoint(-26, -35, -1, 1000, true, 8);
+  turnToPoint(-44, -56, 1, 800);
+  claw.spin(fwd, 5, volt);
+  lift.spin(fwd, -3, volt);
+  moveToPoint(-44, -56, 1, 800, true, 8);
+  driveChassis(4, 4);
+  Brain.resetTimer();
+  while (clawDetect.value() > 90 && Brain.timer(msec) < 700){
+    vex::task::sleep(10);
+  }
+  wait(200, msec);
+  clawRotator.spin(fwd, 4, volt);
 
-  
   /**
   //driveTo(-1, 100, false, 6);
   //moveToPoint(-23.5, -24, 1, 1450, false, 4);
