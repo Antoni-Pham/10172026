@@ -1,3 +1,5 @@
+#include "vex.h"
+
 #include <string>
 #include <cmath>
 #include "../custom/logs/logger.h"
@@ -15,6 +17,7 @@ double normalizeTarget(double angle);
 
 void turnToAngle(double turn_angle, double time_limit_msec, bool exit = true, double max_output = 12);
 void driveTo(double distance_in, double time_limit_msec, bool exit = true, double max_output = 12);
+void driveToDistance(vex::distance& sensor, double distance_in, double angle, double time_limit_msec, bool exit, double max_output = 12, bool drive_forward = true);
 void driveToHeading(double distance_in, double target_angl, double time_limit_msec, bool exit = true, double max_output = 12);
 void curveCircle(double result_angle_deg, double center_radius, double time_limit_msec, bool exit = true, double max_output = 12);
 void swing(double swing_angle, double drive_direction, double time_limit_msec, bool exit = true, double max_output = 12);

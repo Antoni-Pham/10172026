@@ -462,6 +462,136 @@ void driveTo(double distance_in, double time_limit_msec, bool exit, double max_o
   is_turning = false;
 }
 
+void driveToDistance(vex::distance& sensor, double distance_in, double angle,
+                     double time_limit_msec, bool exit, double max_output,
+                     bool drive_forward) {
+
+  if (!std::isfinite(distance_in) || distance_in <= 0 ||
+      !std::isfinite(angle) ||
+      !std::isfinite(time_limit_msec) || time_limit_msec <= 0 ||
+      !std::isfinite(max_output) || max_output <= 0) {
+    logger.error("Invalid driveToDistance parameters");
+    stopChassis(vex::hold);
+    return;
+  }
+
+  const double threshold = 1;
+  const int required_stable_frames = 5;
+
+  PID pid_distance(sensor_distance_kp, sensor_distance_ki, sensor_distance_kd);
+  PID pid_heading(heading_correction_kp,
+                  heading_correction_ki,
+                  heading_correction_kd);
+
+  pid_distance.setTarget(distance_in);
+  pid_distance.setIntegralMax(3);
+
+  pid_heading.setTarget(normalizeTarget(angle));
+  pid_heading.setIntegralMax(0);
+  pid_heading.setIntegralRange(1);
+  pid_heading.setArrive(false);
+
+  double current_distance = 0;
+  double left_output = 0;
+  double right_output = 0;
+
+  int stable_frames = 0;
+  int lost_frames = 0;
+
+  bool target_reached = false;
+  bool sensor_lost = false;
+
+  const double start_time = Brain.timer(msec);
+
+  stopChassis(vex::coast);
+  is_turning = true;
+
+  while ((Brain.timer(msec) - start_time) < time_limit_msec) {
+
+    if (!sensor.isObjectDetected()) {
+      lost_frames++;
+
+      if (lost_frames >= 3) {
+        logger.error("Distance sensor lost object");
+        sensor_lost = true;
+        break;
+      }
+
+      stopChassis(vex::brake);
+      wait(10, msec);
+      continue;
+    }
+
+    lost_frames = 0;
+
+    current_distance = sensor.objectDistance(inches);
+
+    if (!std::isfinite(current_distance) ||
+        current_distance <= 0) {
+      logger.error("Invalid sensor reading");
+      sensor_lost = true;
+      break;
+    }
+
+    double error = distance_in - current_distance;
+
+    // Only stop after 5 consecutive accurate readings
+    if (fabs(error) <= threshold) {
+      stable_frames++;
+
+      if (stable_frames >= required_stable_frames) {
+        target_reached = true;
+        break;
+      }
+    } else {
+      stable_frames = 0;
+    }
+
+    double distance_output = pid_distance.update(current_distance);
+    double correction_output =
+        pid_heading.update(getInertialHeading());
+
+    double drive_direction = drive_forward ? 1.0 : -1.0;
+
+    left_output =
+        -distance_output * drive_direction + correction_output;
+
+    right_output =
+        -distance_output * drive_direction - correction_output;
+
+    scaleToMax(left_output, right_output, max_output);
+
+    driveChassis(left_output, right_output);
+
+    logger.info(
+        "Distance: %.2f | Target: %.2f | Error: %.2f",
+        current_distance,
+        distance_in,
+        error
+    );
+
+    wait(10, msec);
+  }
+
+  if (target_reached) {
+    logger.info("Target reached: %.2f inches", current_distance);
+  } else if (sensor_lost) {
+    logger.error("Stopped because sensor lost object");
+  } else {
+    logger.error(
+        "Distance timeout at %.2f inches",
+        current_distance
+    );
+  }
+
+  prev_left_output = 0;
+  prev_right_output = 0;
+
+  stopChassis(vex::hold);
+  is_turning = false;
+
+}
+
 /*
  * CurveCircle
  * Drives the robot in a circular arc with a specified radius and angle.

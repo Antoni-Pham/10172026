@@ -10,10 +10,12 @@ int auton_selected = 3;
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
 void runAutonomous() {
+  
   //startSubsystems();
   //updateDriverSubsystems(false);
+  
   lift.setPosition(5, degrees);
-  switch(auton_selected) {
+  switch(auton_selected){
     case 1:
       Pin3Quad1();
       break;
@@ -21,7 +23,7 @@ void runAutonomous() {
       exampleAuton2();
       break;  
     case 3:
-      Skills();
+      MatchloadFar();
       break;
     case 4:
       break; 
@@ -35,7 +37,7 @@ void runAutonomous() {
       break;
     case 9:
       break;
-  }
+  } 
 }
 
 /* Past attempts */
