@@ -1075,7 +1075,7 @@ void turnToPoint(double x, double y, int direction, double time_limit_msec) {
   pid.setIntegralRange(3);
 
   pid.setSmallBigErrorTolerance(threshold, threshold * 3);
-  pid.setSmallBigErrorDuration(100, 500);
+  pid.setSmallBigErrorDuration(20, 100);
   pid.setDerivativeTolerance(threshold * 4.5);
 
   // Draw the baseline for visualization
@@ -1125,7 +1125,7 @@ void turnToPoint(double x, double y, int direction, double time_limit_msec) {
  * - max_output: Maximum voltage output to motors.
  * - overturn: If true, allows overturning for sharp turns.
  */
-void moveToPoint(double x, double y, int dir, double time_limit_msec, bool exit, double max_output, bool overturn) {
+void  moveToPoint(double x, double y, int dir, double time_limit_msec, bool exit, double max_output, bool overturn) {
   stopChassis(vex::brakeType::coast); // Stop chassis before moving
   is_turning = true;                  // Set turning state
   double threshold = 0.5;

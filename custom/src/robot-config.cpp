@@ -50,9 +50,9 @@ rotation vertical_tracker = rotation(PORT18, true);
 
 // Distance reset sensors 
 // Set these to random ports if you are not using distance resets
-distance front_sensor = distance(PORT13);
+distance front_sensor = distance(PORT16);
 distance left_sensor = distance(PORT20);
-distance right_sensor = distance(PORT16);
+distance right_sensor = distance(PORT13);
 distance back_sensor = distance(PORT19);
 
 
@@ -96,8 +96,8 @@ double vertical_tracker_diameter = 1.975; // Diameter of the vertical tracker wh
 // double front_sensor_offsetY = 6.5;
 // For the X offset, a negative value indicates that the sensor is located on the left side of the robot, while a positive value indicates that it is on the right side. 
 
-double front_sensor_offsetX = -5; 
-double front_sensor_offsetY = 3.8;
+double front_sensor_offsetX = -6.5; 
+double front_sensor_offsetY = 2;
 
 double left_sensor_offsetX = -6.0; 
 double left_sensor_offsetY = 0.7;

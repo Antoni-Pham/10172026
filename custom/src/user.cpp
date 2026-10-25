@@ -5,7 +5,7 @@
 #include "../include/subsystems.h"
 #include "../include/robot-config.h"
 
-int auton_selected = 1;
+int auton_selected = 3;
 
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
@@ -15,13 +15,13 @@ void runAutonomous() {
   lift.setPosition(5, degrees);
   switch(auton_selected) {
     case 1:
-      Pin3Quad2();
+      Pin3Quad1();
       break;
     case 2:
       exampleAuton2();
       break;  
     case 3:
-      //redGoalRush();
+      Skills();
       break;
     case 4:
       break; 
