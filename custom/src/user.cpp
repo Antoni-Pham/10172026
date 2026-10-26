@@ -151,7 +151,7 @@ void runDriver() {
     //   claw.spin(fwd, 5, volt);
     // }
     if (controller_1.ButtonR1.pressing() && !r1 && after1 == false) {
-      lift.spin(fwd, -4, volt);
+      lift.spin(fwd, -12, volt);
       r1 = true;
     } else if (!controller_1.ButtonR1.pressing() && r1) {
       r1 = false;
@@ -162,7 +162,7 @@ void runDriver() {
     } else if (!controller_1.ButtonR2.pressing() && r2) {
       r2 = false;
     }
-    if (!controller_1.ButtonR1.pressing() && !controller_1.ButtonR2.pressing() && after1 == false) {
+    if (!controller_1.ButtonR1.pressing() && !controller_1.ButtonR2.pressing() && after1 == false){
       lift.stop(hold);
     }
 
@@ -343,6 +343,8 @@ void runPreAutonomous() {
   } else {
     thread odom = thread(trackNoOdomWheel);
   }
+
+  
 
 
 }

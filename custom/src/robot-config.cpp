@@ -20,11 +20,13 @@ controller controller_1 = controller(primary);
 
 motor left_chassis1 = motor(PORT11, ratio6_1, true);
 motor left_chassis2 = motor(PORT12, ratio6_1, true);
-motor_group left_chassis = motor_group(left_chassis2, left_chassis1);
+motor left_chassis3 = motor(PORT14, ratio18_1, true);
+motor_group left_chassis = motor_group(left_chassis2, left_chassis1, left_chassis3);
 
 motor right_chassis1 = motor(PORT8, ratio6_1, false);
 motor right_chassis2 = motor(PORT9, ratio6_1, false);
-motor_group right_chassis = motor_group(right_chassis2, right_chassis1);
+motor right_chassis3 = motor(PORT17, ratio18_1, false);
+motor_group right_chassis = motor_group(right_chassis2, right_chassis1, right_chassis3);
 
 motor liftL = motor(PORT1, ratio36_1, false);
 motor liftR = motor(PORT6, ratio36_1, true);
