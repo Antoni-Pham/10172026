@@ -29,8 +29,8 @@ using namespace vex;
 
 void pre_auton(void) {
   lift.spin(fwd,-10,volt);
-  wait(200,msec);
-  while (abs(lift.velocity(percent))>5){
+  wait(500,msec);
+  while (abs(lift.velocity(percent))>2){
     wait(10,msec);
   }
   lift.stop(hold);
