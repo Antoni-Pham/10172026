@@ -156,7 +156,7 @@ void runDriver() {
     //   claw.spin(fwd, 5, volt);
     // }
     if (controller_1.ButtonR1.pressing() && !r1 && after1 == false) {
-      lift.spin(fwd, -10, volt);
+      lift.spin(fwd, -6, volt);
       r1 = true;
     } else if (!controller_1.ButtonR1.pressing() && r1) {
       r1 = false;
