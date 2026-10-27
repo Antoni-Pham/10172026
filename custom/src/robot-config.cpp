@@ -28,9 +28,9 @@ motor right_chassis2 = motor(PORT9, ratio6_1, false);
 motor right_chassis3 = motor(PORT17, ratio18_1, false);
 motor_group right_chassis = motor_group(right_chassis2, right_chassis1, right_chassis3);
 
-motor liftL = motor(PORT1, ratio36_1, false);
-motor liftR = motor(PORT6, ratio36_1, true);
-motor_group lift = motor_group(liftL, liftR);
+motor lift = motor(PORT6, ratio36_1, true);
+// motor liftL = motor(PORT1, ratio36_1, false);
+// motor_group lift = motor_group(liftL, liftR);
 
 motor toggle = motor(PORT2, ratio18_1, true);
 
@@ -74,10 +74,10 @@ double wheel_distance_in = (36.0 / 48.0) * 2.75 * M_PI;
 // turn_*     : PID for turning in place
 // turn_to_point_* : PID for turning to face a field point
 // heading_correction_* : PID for heading correction during linear movement
-double distance_kp = 1.3, distance_ki = 0.0, distance_kd = 7.5;
+double distance_kp = 1.3, distance_ki = 0.0, distance_kd = 8;
 double sensor_distance_kp = 2, sensor_distance_ki = 0.0, sensor_distance_kd = 7.5;
 double turn_kp = 0.5, turn_ki = 0, turn_kd = 2.7;
-double turn_to_point_kp = 0.5, turn_to_point_ki = 0, turn_to_point_kd = 2.7;
+double turn_to_point_kp = 0.5, turn_to_point_ki = 0, turn_to_point_kd = 3.4;
 double heading_correction_kp = 0.8, heading_correction_ki = 0, heading_correction_kd = 4;
 
 // Enable or disable the use of tracking wheels

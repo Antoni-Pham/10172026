@@ -8,9 +8,11 @@ extern brain Brain;
 extern controller controller_1;
 extern motor left_chassis1;
 extern motor left_chassis2;
+extern motor left_chassis3;
 extern motor_group left_chassis;
 extern motor right_chassis1;
 extern motor right_chassis2;
+extern motor right_chassis3;
 extern motor_group right_chassis;
 extern inertial inertial_sensor;
 extern optical toggleOptical;
@@ -23,9 +25,9 @@ extern distance right_sensor;
 extern distance back_sensor;
 
 extern motor_group claw;
-extern motor_group lift;
-extern motor liftL;
-extern motor liftR;
+// extern motor_group lift;
+extern motor lift;
+// extern motor liftR;
 extern motor toggle;
 extern motor clawRotator;
 

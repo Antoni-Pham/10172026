@@ -5,7 +5,7 @@
 #include "../include/subsystems.h"
 #include "../include/robot-config.h"
 
-int auton_selected = 1;
+int auton_selected = 3;
 
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
@@ -26,7 +26,7 @@ void runAutonomous() {
       Skills();
       break;
     case 4:
-      break; 
+      ToggleFar();
     case 5:
       break;
     case 6:
@@ -323,7 +323,6 @@ void rollerColorSelectorLoop() {
 void runPreAutonomous() {
     // Initializing   mvc  Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-
   //startSubsystems();
   
   // Calibrate inertial sensor
@@ -348,8 +347,4 @@ void runPreAutonomous() {
   } else {
     thread odom = thread(trackNoOdomWheel);
   }
-
-  
-
-
 }
