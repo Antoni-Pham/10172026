@@ -291,7 +291,7 @@ void drawRollerColorSelector() {
   Brain.Screen.setCursor(11, 2);
   Brain.Screen.print("Selected color: %d", selectedRollerColor);
 }
-void rollerColorSelectorLoop() {
+void rollerColorSelectorLoopAndAuton() {
   bool was_pressed = false;
   while (!Competition.isEnabled()) {
     const bool pressed = Brain.Screen.pressing();
@@ -309,11 +309,13 @@ void rollerColorSelectorLoop() {
           selectedRollerColor = static_cast<int>(RollerColor::Yellow);
         }
         Brain.Screen.setCursor(11, 2);
-  Brain.Screen.print("Selected color: %d", selectedRollerColor);
         // setRollerTargetColor(
         // static_cast<RollerColor>(selected_roller_color));
         // drawRollerColorSelector();
+      } else {
+        auton_selected++;
       }
+      Brain.Screen.print("Selected color: %d, Autonomous: %d", selectedRollerColor, auton_selected);
     }
     was_pressed = pressed;
     
@@ -335,7 +337,7 @@ void runPreAutonomous() {
   // double current_heading = inertial_sensor.heading();
   // Brain.Screen.print(current_heading);
   drawRollerColorSelector();
-  thread rollerColorSelectorThread = thread(rollerColorSelectorLoop);
+  thread rollerColorSelectorThread = thread(rollerColorSelectorLoopAndAuton);
   // odom tracking
   resetChassis();
   if(using_horizontal_tracker && using_vertical_tracker) {

@@ -3,6 +3,6 @@
 void runAutonomous();
 void runDriver();
 void runPreAutonomous();
-void rollerColorSelectorLoop();
+void rollerColorSelectorLoopAndAuton();
 // A global instance of competition
 extern competition Competition;

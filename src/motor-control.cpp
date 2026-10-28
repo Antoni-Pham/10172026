@@ -165,7 +165,7 @@ void turnToAngle(double turn_angle, double time_limit_msec, bool exit, double ma
   pid.setIntegralMax(0);
   pid.setIntegralRange(3);
   pid.setSmallBigErrorTolerance(threshold, threshold * 3);
-  pid.setSmallBigErrorDuration(50, 250);
+  pid.setSmallBigErrorDuration(50, 80);
   pid.setDerivativeTolerance(threshold * 4.5);
 
   // Draw baseline for visualization
@@ -1205,7 +1205,7 @@ void turnToPoint(double x, double y, int direction, double time_limit_msec) {
   pid.setIntegralRange(3);
 
   pid.setSmallBigErrorTolerance(threshold, threshold * 3);
-  pid.setSmallBigErrorDuration(20, 100);
+  pid.setSmallBigErrorDuration(20, 50);
   pid.setDerivativeTolerance(threshold * 4.5);
 
   // Draw the baseline for visualization

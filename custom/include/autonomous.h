@@ -2,7 +2,9 @@
 void exampleAuton2();
 void WallAuton();
 void Pin3Quad1(int color);
-void Pin3Quad2();
+void Pin3Quad2(int color);
+void PreloadQuad1(int color);
+void PreloadQuad2(int color);
 void Skills();
 void MatchloadFar();
 void ToggleFar();
