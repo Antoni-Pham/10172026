@@ -5,7 +5,7 @@
 #include "../include/subsystems.h"
 #include "../include/robot-config.h"
 
-int auton_selected = 3;
+int auton_selected = 5;
 
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
@@ -26,9 +26,10 @@ void runAutonomous() {
       Skills();
       break;
     case 4:
-      ToggleFar();
+      PreloadQuad2(1);
+      stopChassis(coast);
     case 5:
-      break;
+      Pin3Quad2(1);
     case 6:
       break;
     case 7:
@@ -74,6 +75,8 @@ void runDriver() {
   stopChassis(coast);
   heading_correction = false;
 
+  float forward_sensitivity = 0.07;
+  float turning_sensitivity = 0.05;
   int ch1 = 0;
   int ch2 = 0;
   int ch3 = 0;
@@ -103,7 +106,7 @@ void runDriver() {
     ch4 = controller_1.Axis4.value();
 
     // default tank drive or replace it with your preferred driver code here: 
-    driveChassis(ch3 * 0.07 + ch1 * 0.05, ch3 * 0.07 - ch1 * 0.05);
+    driveChassis(ch3 * forward_sensitivity + ch1 * turning_sensitivity, ch3 * forward_sensitivity - ch1 * turning_sensitivity);
 
     // To be re-incorporated to aid driver with auton functions
     // updateDriverSubsystems(l2);
@@ -175,10 +178,14 @@ void runDriver() {
     if(!controller_1.ButtonL2.pressing() && l2){
       l2 = false;
     } else if (controller_1.ButtonL2.pressing() && !toggleOn && !l2) {
+      forward_sensitivity = 0.10;
+      turning_sensitivity = 0.08;
       toggle.spin(reverse, 12, volt);
       toggleOn = true;
       l2 = true;
     } else if ((controller_1.ButtonL2.pressing() && toggleOn && !l2)) {
+      forward_sensitivity = 0.07;
+      turning_sensitivity = 0.05;
       toggle.stop(hold);
       toggleOn = false;
       l2 = true;
@@ -186,10 +193,14 @@ void runDriver() {
       toggle.stop(hold);
       toggleOn = false;
       l2 = false;
+      forward_sensitivity = 0.07;
+      turning_sensitivity = 0.05;
     } else if (toggleOptical.isNearObject() && toggleOptical.value() > 0 && toggleOptical.value() < 30 && toggleOn && selectedRollerColor == static_cast<int>(RollerColor::Red) && !l2) {
       toggle.stop(hold);
       toggleOn = false;
       l2 = false;
+      forward_sensitivity = 0.07;
+      turning_sensitivity = 0.05;
     }
     wait(15, msec);
     //red 0-30

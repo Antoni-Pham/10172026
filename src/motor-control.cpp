@@ -162,10 +162,10 @@ void turnToAngle(double turn_angle, double time_limit_msec, bool exit, double ma
   // Normalize and set PID target
   turn_angle = normalizeTarget(turn_angle);
   pid.setTarget(turn_angle);
-  pid.setIntegralMax(0);
+  pid.setIntegralMax(0);  
   pid.setIntegralRange(3);
   pid.setSmallBigErrorTolerance(threshold, threshold * 3);
-  pid.setSmallBigErrorDuration(50, 80);
+  pid.setSmallBigErrorDuration(50, 250);
   pid.setDerivativeTolerance(threshold * 4.5);
 
   // Draw baseline for visualization
@@ -1198,21 +1198,21 @@ void turnToPoint(double x, double y, int direction, double time_limit_msec) {
   }
   // Calculate target angle using atan2 and normalize
   double turn_angle = normalizeTarget(radToDeg(atan2(x - x_pos, y - y_pos)) + add);
-  PID pid = PID(turn_to_point_kp, turn_to_point_ki, turn_to_point_kd);
+  PID pid = PID(turn_kp, turn_ki, turn_kd);
 
   pid.setTarget(turn_angle); // Set PID target
   pid.setIntegralMax(0);  
   pid.setIntegralRange(3);
 
   pid.setSmallBigErrorTolerance(threshold, threshold * 3);
-  pid.setSmallBigErrorDuration(20, 50);
+  pid.setSmallBigErrorDuration(20, 100);
   pid.setDerivativeTolerance(threshold * 4.5);
 
   // Draw the baseline for visualization
   double draw_amplifier = 230 / fabs(turn_angle);
   Brain.Screen.clearScreen(black);
   Brain.Screen.setPenColor(green);
-  Brain.Screen.drawLine(0, fabs(turn_angle) * draw_amplifier,
+  Brain.Screen.drawLine(0, fabs(turn_angle) * draw_amplifier, 
                         600, fabs(turn_angle) * draw_amplifier);
   Brain.Screen.setPenColor(red);
 
@@ -1230,14 +1230,14 @@ void turnToPoint(double x, double y, int direction, double time_limit_msec) {
 
     // Draw heading trace
     Brain.Screen.drawLine(
-        index * 3, fabs(previous_heading) * draw_amplifier,
+        index * 3, fabs(previous_heading) * draw_amplifier, 
         (index + 1) * 3, fabs(current_heading * draw_amplifier));
     index++;
     previous_heading = current_heading;
 
     driveChassis(output, -output); // Apply output to chassis
     wait(10, msec);
-  }
+  }  
   logger.info("Turn Odom: %.2f, %.2f, %.2f", x_pos, y_pos, getInertialHeading());
   logger.fatal("----------------------------");
   stopChassis(vex::hold); // Stop at end
@@ -1253,7 +1253,7 @@ void turnToPointTwo(double x, double y, int dir, double time_limit_msec, double 
   }
   // Calculate target angle using atan2 and normalize
   double turn_angle = normalizeTarget(radToDeg(atan2(x - x_pos, y - y_pos)) + add);
-  PID pid = PID(turn_to_point_kp, turn_to_point_ki, turn_to_point_kd);
+  PID pid = PID(turn_kp, turn_ki, turn_kd);
 
   pid.setTarget(turn_angle); // Set PID target
   pid.setIntegralMax(0);  
