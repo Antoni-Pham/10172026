@@ -38,6 +38,7 @@ extern double distance_kp, distance_ki, distance_kd;
 extern double sensor_distance_kp, sensor_distance_ki, sensor_distance_kd;
 extern double turn_kp, turn_ki, turn_kd;
 extern double turn_to_point_kp, turn_to_point_ki, turn_to_point_kd;
+extern double tip_kp, tip_ki, tip_kd;
 extern double heading_correction_kp, heading_correction_ki, heading_correction_kd;
 
 extern bool using_horizontal_tracker;

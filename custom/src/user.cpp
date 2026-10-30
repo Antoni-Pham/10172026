@@ -5,7 +5,8 @@
 #include "../include/subsystems.h"
 #include "../include/robot-config.h"
 
-int auton_selected = 5;
+volatile int selectedRollerColor = static_cast<int>(RollerColor::Red);
+int auton_selected = 1;
 
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
@@ -14,22 +15,45 @@ void runAutonomous() {
   //startSubsystems();
   //updateDriverSubsystems(false);
   
-  lift.setPosition(5, degrees);
+  lift.setPosition(-2, degrees);
   switch(auton_selected){
     case 1:
-      Pin3Quad1(1);
-      break;
-    case 2:
-      exampleAuton2();
-      break;  
-    case 3:
       Skills();
       break;
-    case 4:
-      PreloadQuad2(1);
+    case 2:
+      if (selectedRollerColor == static_cast<int>(RollerColor::Red))
+      {
+        PreloadQuad1(1);
+      } else if (selectedRollerColor == static_cast<int>(RollerColor::Blue)) {
+        PreloadQuad1(2);
+      }
       stopChassis(coast);
+      break;  
+    case 3:
+      if (selectedRollerColor == static_cast<int>(RollerColor::Red))
+      {
+        Pin3Quad1(1);
+      } else if (selectedRollerColor == static_cast<int>(RollerColor::Blue)){
+        Pin3Quad1(2);
+      }
+      break;
+    case 4:
+      if (selectedRollerColor == static_cast<int>(RollerColor::Red))
+      {
+        PreloadQuad2(1);
+      } else if (selectedRollerColor == static_cast<int>(RollerColor::Blue)){
+        PreloadQuad2(2);
+      }
+      stopChassis(coast);
+      break;
     case 5:
-      Pin3Quad2(1);
+      if (selectedRollerColor == static_cast<int>(RollerColor::Red))
+      {
+        Pin3Quad2(1);
+      } else if (selectedRollerColor == static_cast<int>(RollerColor::Blue)){
+        Pin3Quad2(2);
+      }
+      break;
     case 6:
       break;
     case 7:
@@ -66,7 +90,7 @@ void runAutonomous() {
 // bool isIntaking;
 // bool isOuttaking;
 
-volatile int selectedRollerColor = static_cast<int>(RollerColor::Red);
+
 
 void runDriver() {
   // Stop auton subsystems until we incorporate auton functions to aid driver.
@@ -297,10 +321,10 @@ void drawRollerColorSelector() {
     Brain.Screen.setCursor(button_y / 20 + 1, x / 10 + 2);
     Brain.Screen.print("%s", labels[i]);
   }
-
+  Brain.Screen.setFillColor("RED");
   Brain.Screen.setPenColor(white);
   Brain.Screen.setCursor(11, 2);
-  Brain.Screen.print("Selected color: %d", selectedRollerColor);
+  Brain.Screen.print("Selected color: %d, Autonomous: %d", selectedRollerColor, auton_selected);
 }
 void rollerColorSelectorLoopAndAuton() {
   bool was_pressed = false;
@@ -326,6 +350,7 @@ void rollerColorSelectorLoopAndAuton() {
       } else {
         auton_selected++;
       }
+      Brain.Screen.setCursor(11, 2);
       Brain.Screen.print("Selected color: %d, Autonomous: %d", selectedRollerColor, auton_selected);
     }
     was_pressed = pressed;

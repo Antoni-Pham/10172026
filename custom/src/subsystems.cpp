@@ -62,10 +62,11 @@ volatile int autonomous_score_count = 0;
 LiftState lift_state = LiftState::Intaking;
 
 double liftHeightInches() {
-  const double motor_degrees =
-      (liftL.position(degrees) + liftR.position(degrees)) / 2.0;
-  return motor_degrees / 360.0 / lift_gear_reduction *
-         lift_inches_per_output_revolution;
+  // const double motor_degrees =
+  //     (liftL.position(degrees) + liftR.position(degrees)) / 2.0;
+  // return motor_degrees / 360.0 / lift_gear_reduction *
+  //        lift_inches_per_output_revolution;
+  return 0;
 }
 
 void logLiftCommand(const char* command, double target_height,

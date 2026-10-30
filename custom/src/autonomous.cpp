@@ -143,6 +143,56 @@ bool runMovementWhileWaitingForGamePiece(AutonomousMovement movement,
 
 }  // namespace
 
+void tipMovement(double timeout_msec) {
+  if (!std::isfinite(timeout_msec) || timeout_msec <= 0) {
+    logger.error("Invalid tipMovement timeout");
+    stopChassis(hold);
+    return;
+  }
+
+  // PID pitch_pid(tip_kp, tip_ki, tip_kd);
+  // pitch_pid.setTarget(0);
+  // pitch_pid.setIntegralMax(8);
+  // pitch_pid.setIntegralRange(5);
+  // pitch_pid.setArrive(false);
+
+  const double max_output = 8;
+  const double start_time = Brain.timer(msec);
+  is_turning = true;
+  while (Brain.timer(msec) - start_time < timeout_msec) {
+    const double pitch = inertial_sensor.pitch();
+    if (!std::isfinite(pitch)) {
+      logger.error("tipMovement received invalid IMU pitch");
+      stopChassis(hold);
+      correct_angle = getInertialHeading();
+      is_turning = false;
+      return;
+    }
+
+    // double output = pitch_pid.update(pitch);
+    // if (output > max_output) output = max_output;
+    // else if (output < -max_output) output = -max_output;
+
+    // driveChassis(output, output);
+    // vex::wait(10, msec);
+  }
+
+  stopChassis(hold);
+  correct_angle = getInertialHeading();
+  is_turning = false;
+}
+
+namespace {
+
+void startTipMovementAsync() {
+  vex::thread([]() {
+    tipMovement(1000);
+    return 0;
+  });
+}
+
+}  // namespace
+
 void WallAuton(){
   x_pos = -4.25;
   y_pos = -62;
@@ -209,6 +259,7 @@ volatile int i = 0;
 void Skills() {
   Pin3Quad1(1);
   claw.spin(fwd, 5, volt);
+  // startTipMovementAsync();
   lift.spin(fwd, -4, volt);
   driveChassis(-3,-3);
   wait(300,msec);
@@ -217,7 +268,7 @@ void Skills() {
   wait(10,msec);
   moveToPoint(58,y_pos,-1,2000,true, 6);
   turnToAngle(180,2000,true,10);
-  for (i = 0; i < 1; i++) { 
+  for (i = 0; i < 2; i++) { 
     resetPositionLeft();
     resetPositionFront();
     // moveToPoint(60, -55, 1, 1000, false,6);
@@ -229,7 +280,7 @@ void Skills() {
       vex::task::sleep(10);
     }
     wait(50,msec);
-    driveChassis(-2.3,-2.3);
+    driveChassis(-2,-2);
     wait(100,msec);
     clawRotator.spin(fwd,3,volt);
     wait(400,msec);
@@ -243,10 +294,10 @@ void Skills() {
           vex::wait(500, msec);
       } return 0;
     });
-    moveToPoint(38, -52, 1, 1000, true, 9);
+    moveToPoint(40, -54, 1, 1000, true, 9);
     driveToHeading(17, 275, 700, false, 4.8);
     driveToHeading(10, 275, 400, false, 2);
-    wait(100, msec);
+    // startTipMovementAsync();
     lift.spin(fwd, -4.5, volt);
     wait(350, msec);
     lift.stop(hold);
@@ -258,8 +309,9 @@ void Skills() {
     turnToAngle(270,1000,true, 6);
     Brain.resetTimer();
     claw.spin(fwd, 5, volt);
+    // startTipMovementAsync();
     lift.spin(fwd, -4, volt);
-   driveChassis(-3,-3);
+    driveChassis(-3,-3);
     wait(300,msec);
     swing(270,-1,2000,true,12);
     resetPositionBack();
@@ -305,10 +357,13 @@ void MatchloadFar() {
     }
     }
     wait(50,msec);
-    driveChassis(-2.3,-2.3);
-    wait(175,msec);
+    driveChassis(-2,-2);
+    wait(100,msec);
     clawRotator.spin(fwd,3,volt);
     wait(350,msec);
+    moveToPoint(47.2, -44, -1, 2000, true, 6);
+    //moveToPoint(50, -48, -1, 1000, true, 8);
+    //turnToPointTwo(46, -24, -1, 1000, 7);
     if (i==4){
       lift.setVelocity(100, pct);
       lift.spinToPosition(590 , deg, false);
@@ -317,22 +372,17 @@ void MatchloadFar() {
       lift.spinToPosition(130 , deg, false);
     } else {
       lift.setVelocity(60, pct);
-      lift.spinToPosition(130 + i*70 , deg, false);
+      lift.spinToPosition(130 + i*75 , deg, false);
     }
-    if (i > 2) {
-      moveToPoint(49.8, -44, -1, 2000, true, 4);
-    } else {
-      moveToPoint(49.8, -44, -1, 2000, true, 6);
-    }
-    //moveToPoint(50, -48, -1, 1000, true, 8);
-    //turnToPointTwo(46, -24, -1, 1000, 7);
-    turnToPoint(47,-24,1,1000);
-    driveToHeading(20, 355, 500, true, 5.5);
-    driveToHeading(20, 355, 600, true, 2);
+    turnToAngle(0, 1000, true, 8);
+    correct_angle = 0;
+    driveToHeading(10, 0, 900, false, 6);    
+    driveChassis(3.5,3.5);
+    wait(300, msec);
     resetPositionBack();
     resetPositionRight();
     if (i==0){
-      driveChassis(-1, -1);
+      driveChassis(-2.5, -2.5);
       lift.spin(fwd, -6, volt);
       wait(160,msec);
       stopChassis(hold);
@@ -343,8 +393,8 @@ void MatchloadFar() {
       driveChassis(-5, -5);
       wait(150,msec);
     } else {
-      lift.spin(fwd, -4.5, volt);
-      vex::wait(250, msec);
+      lift.spin(fwd, -4, volt);
+      vex::wait(500, msec);
       lift.stop(hold);
       clawRotator.spin(fwd, -4, volt);
       claw.spin(fwd, 2, volt);
@@ -357,9 +407,9 @@ void MatchloadFar() {
     // turnToAngle(-90, 900, true, 7);
     // driveToDist(back_sensor, 9, 7, false);
     // turnToAngle(180, 900, true, 7);
-    driveChassis(-5,-5);
-    wait(200,msec);
-    boomerang(59.5, -48, -1, -10, 0.1, 2000,true,7);
+    driveToHeading(-5, -5, 800, false, 5);
+    correct_angle = -10;
+    moveToPoint(59.5, -48, -1, 2000,true,7);
     claw.spin(fwd, 5, volt);
     lift.spin(fwd, -3, volt);
     turnToAngle(180,1000,true,8);
@@ -440,9 +490,9 @@ void ToggleFar() {
     resetPositionLeft();
     resetPositionFront();
     wait(10,msec);
-    moveToPoint(x_pos+8, 1,-1,3000,true,8);
-    moveToPoint(x_pos-2, -6, 1,1500,true,8);
-    turnToAngle(270,1000,true,8);
+    moveToPoint(x_pos+8, 1,-1,3000,false,8);
+    moveToPoint(x_pos-2, -6, 1,1500,false,8);
+    turnToAngle(270,600,true,10);
     driveChassis(-6,-6);
     toggle.spin(reverse, 9, volt);
      while(toggleOptical.value() < 5 || toggleOptical.value() > 45){
@@ -480,7 +530,7 @@ void Pin3Quad1(int color){
   // lift.spinToPosition(190, deg, false);
   //   return 0; });
   //turnToPoint(27, -48, 1, 900);
-  driveToHeading(8, 180, 600, false, 10);
+  driveToHeading(8, 180, 600, true, 10);
   moveToPoint(27, -48, 1, 700, true, 6);
   //moveToPoint(-40,-20,1,1000,false,8);
   driveChassis(4,4);
@@ -498,7 +548,7 @@ void Pin3Quad1(int color){
   turnToPoint(50, -48, 1, 800);
   claw.spin(fwd, 5, volt);
   lift.spin(fwd, -6, volt);
-  moveToPoint(39, -36, 1, 2000, false, 6.7);
+  moveToPoint(39, -36, 1, 2000, true, 6.7);
   turnToPoint(50, -48, 1, 800);
   driveChassis(4, 4);
   Brain.resetTimer();
@@ -524,7 +574,7 @@ void Pin3Quad1(int color){
   //moveToPoint(-24, -48, 1, 1100, true, 4);
   driveToHeading(17, 275, 700, false, 10);
   driveToHeading(14, 275, 1000, false, 5);
-  lift.spin(fwd, -5.5, volt);
+  lift.spin(fwd, -4, volt);
   wait(200, msec);
   clawRotator.spin(fwd, -4, volt); 
   wait(200, msec);
@@ -558,7 +608,7 @@ void PreloadQuad1(int color) {
   lift.spinToPosition(110, deg, false);
   turnToPoint(24, -47, 1, 500);
   boomerang(24, -47, 1, 50, 0.5, 950, false, 7);
-  driveChassis(-1, -1);
+  driveChassis(-2.5, -2.5);
   lift.spin(fwd, -6, volt);
   wait(160,msec);
   stopChassis(hold);
@@ -676,7 +726,7 @@ void PreloadQuad2(int color) {
   lift.spinToPosition(110, deg, false);
   turnToPoint(-24, -48, 1, 500);
   boomerang(-24, -48, 1, -50, 0.5, 950, false, 7);
-  driveChassis(-1, -1);
+  driveChassis(-2.5, -2.5);
   lift.spin(fwd, -6, volt);
   wait(160,msec);
   stopChassis(hold);

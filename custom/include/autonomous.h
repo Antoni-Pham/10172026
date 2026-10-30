@@ -8,3 +8,4 @@ void PreloadQuad2(int color);
 void Skills();
 void MatchloadFar();
 void ToggleFar();
+void tipMovement(double timeout_msec);

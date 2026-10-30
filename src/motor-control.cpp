@@ -284,7 +284,7 @@ void driveToHeading(double distance_in, double target_angl, double time_limit_ms
   pid_distance.setTarget(distance_in);
   pid_distance.setIntegralMax(3);
   pid_distance.setSmallBigErrorTolerance(threshold, threshold * 3);
-  pid_distance.setSmallBigErrorDuration(50, 250);
+  pid_distance.setSmallBigErrorDuration(0, 0);
   pid_distance.setDerivativeTolerance(5);
 
   pid_heading.setTarget(normalizeTarget(target_angl));
@@ -1348,7 +1348,7 @@ void  moveToPoint(double x, double y, int dir, double time_limit_msec, bool exit
   pid_distance.setIntegralMax(0);  
   pid_distance.setIntegralRange(3);
   pid_distance.setSmallBigErrorTolerance(threshold, threshold * 3);
-  pid_distance.setSmallBigErrorDuration(50, 250);
+  pid_distance.setSmallBigErrorDuration(0, 0);
   pid_distance.setDerivativeTolerance(5);
   
   pid_heading.setTarget(normalizeTarget(radToDeg(atan2(x - x_pos, y - y_pos)) + add));
@@ -1488,7 +1488,7 @@ void boomerang(double x, double y, int dir, double a, double dlead, double time_
   pid_distance.setTarget(0); // Target is dynamically updated
   pid_distance.setIntegralMax(3);  
   pid_distance.setSmallBigErrorTolerance(threshold, threshold * 3);
-  pid_distance.setSmallBigErrorDuration(50, 250);
+  pid_distance.setSmallBigErrorDuration(0, 0);
   pid_distance.setDerivativeTolerance(5);
 
   pid_heading.setTarget(normalizeTarget(radToDeg(atan2(x - x_pos, y - y_pos))));
