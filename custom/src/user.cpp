@@ -198,7 +198,18 @@ void runDriver() {
       lift.stop(hold);
     }
 
-    // Toggle control: Button X = Toggle on/off. Hold it to override the toggle and run the motor. If the optical sensor detects the wrong color, it will stop the motor.
+    if(!controller_1.ButtonX.pressing() && buttonX){
+      buttonX = false;
+    } else if (controller_1.ButtonX.pressing() && !toggleOn && !buttonX) {
+      forward_sensitivity = 0.10;
+      turning_sensitivity = 0.08;
+      toggle.spin(reverse, 6, volt);
+      toggleOn = true;
+      buttonX = true;
+
+    }
+
+    // Toggle control: Button L2 = Toggle on/off. Hold it to override the toggle and run the motor. If the optical sensor detects the wrong color, it will stop the motor.
     if(!controller_1.ButtonL2.pressing() && l2){
       l2 = false;
     } else if (controller_1.ButtonL2.pressing() && !toggleOn && !l2) {
@@ -207,7 +218,7 @@ void runDriver() {
       toggle.spin(reverse, 12, volt);
       toggleOn = true;
       l2 = true;
-    } else if ((controller_1.ButtonL2.pressing() && toggleOn && !l2)) {
+    } else if (controller_1.ButtonL2.pressing() && toggleOn && !l2) {
       forward_sensitivity = 0.07;
       turning_sensitivity = 0.05;
       toggle.stop(hold);
