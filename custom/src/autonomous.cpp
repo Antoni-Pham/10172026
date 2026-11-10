@@ -250,8 +250,7 @@ void exampleAuton() {
 }
 
 void exampleAuton2(){
-  resetPositionBack();
-  resetPositionRight();
+  driveTo(24, 10000, true, 12);
 }
 
 volatile int i = 0;
@@ -262,7 +261,7 @@ void Skills() {
   lift.spin(fwd, -4, volt);
   driveChassis(-6,-6);
   wait(300,msec);
-  swing(270,-1,2000,true,10);
+  swing(270,-1,600,true,10);
   resetPositionBack();
   wait(10,msec);
   moveToPoint(58,y_pos,-1,2000,true, 6);
@@ -360,9 +359,11 @@ void MatchloadFar() {
     wait(50,msec);
     driveChassis(-2,-2);
     wait(110,msec);
-    clawRotator.spin(fwd,6,volt);
-    wait(350,msec);
-    moveToPoint(47.8, -44, -1, 2000, true, 6);
+    clawRotator.spin(fwd, 6, volt);
+    wait(400,msec);
+    driveChassis(-5, -5);
+    wait(200, msec);
+    moveToPoint(45.5 , -44, -1, 2000, true, 6);
     //moveToPoint(50, -48, -1, 1000, true, 8);
     //turnToPointTwo(46, -24, -1, 1000, 7);
     if (i==4){
@@ -383,7 +384,7 @@ void MatchloadFar() {
     resetPositionBack();
     resetPositionRight();
     if (i==0){
-      driveChassis(-2.5, -2.5);
+      driveChassis(-2, -2);
       lift.spin(fwd, -6, volt);
       wait(160,msec);
       stopChassis(hold);
@@ -393,6 +394,16 @@ void MatchloadFar() {
       claw.spin(fwd, -1, volt);
       driveChassis(-5, -5);
       wait(150,msec);
+    } else if (i==1) {
+      driveChassis(-1.7,-1.7);
+      wait(150,msec);
+      stopChassis(brake);
+      lift.spin(fwd, -5, volt);
+      wait(400, msec);
+      lift.stop(hold);
+      stopChassis(brake);
+      clawRotator.spin(fwd, -4, volt);  
+      claw.spin(fwd, 0, volt);
     } else {
       lift.spin(fwd, -4, volt);
       vex::wait(500, msec);
@@ -401,7 +412,7 @@ void MatchloadFar() {
       claw.spin(fwd, 2, volt);
       if (i==4){
         claw.spin(fwd, -3, volt);
-    }
+      }
     }
 
     // driveToDist(back_sensor, 19, 7, false);
@@ -539,7 +550,7 @@ void Pin3Quad1(int color){
   driveChassis(-1.7,-1.7);
   wait(150,msec);
   stopChassis(brake);
-  lift.spin(fwd, -7, volt);
+  lift.spin(fwd, -6, volt);
   wait(300, msec);
   lift.stop(hold);
   stopChassis(brake);
@@ -549,11 +560,11 @@ void Pin3Quad1(int color){
   driveChassis(-5,-5);
   wait(250,msec);
   moveToPoint(24, -22.5, -1, 1000, true, 8);
-  turnToPoint(50, -48, 1, 800);
+  turnToPoint(52, -48, 1, 800);
   claw.spin(fwd, 5, volt);
   lift.spin(fwd, -6, volt);
-  moveToPoint(39, -36, 1, 2000, true, 6.7);
-  turnToPoint(50, -48, 1, 800);
+  moveToPoint(41, -36, 1, 2000, true, 6.7);
+  turnToPoint(52, -48, 1, 800);
   driveChassis(4, 4);
   Brain.resetTimer();
   while (clawDetect.value() > 130 && Brain.timer(msec) < 700){
@@ -730,7 +741,7 @@ void PreloadQuad2(int color) {
   lift.spinToPosition(110, deg, false);
   turnToPoint(-24, -48, 1, 500);
   boomerang(-24, -48, 1, -50, 0.5, 950, false, 7);
-  driveChassis(-2.5, -2.5);
+  driveChassis(-1.5, -1.5);
   lift.spin(fwd, -6, volt);
   wait(160,msec);
   stopChassis(hold);

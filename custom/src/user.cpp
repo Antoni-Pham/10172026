@@ -18,7 +18,7 @@ void runAutonomous() {
   lift.setPosition(-2, degrees);
   switch(auton_selected){
     case 1:
-      Skills();
+      exampleAuton2();
       break;
     case 2:
       if (selectedRollerColor == static_cast<int>(RollerColor::Red))
