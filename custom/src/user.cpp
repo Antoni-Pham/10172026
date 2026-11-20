@@ -18,7 +18,7 @@ void runAutonomous() {
   lift.setPosition(-2, degrees);
   switch(auton_selected){
     case 1:
-      exampleAuton2();
+      Skills();
       break;
     case 2:
       if (selectedRollerColor == static_cast<int>(RollerColor::Red))
@@ -136,11 +136,11 @@ void runDriver() {
     // updateDriverSubsystems(l2);
 
     if (Brain.timer(msec) > 500 && brainTimerOn && after1 == false) {
-      lift.setVelocity(85, percent);
-      lift.spinToPosition(-8, degrees, false);
+      lift.setVelocity(82, percent);
+      lift.spinToPosition(-15, degrees, false);
       after1 = true;
     }
-    if (Brain.timer(msec) > 1800 && brainTimerOn && after2 == false) {
+    if (Brain.timer(msec) > 2300 && brainTimerOn && after2 == false) {
       brainTimerOn = false;
       after1 = false;
       lift.stop(hold);
@@ -150,7 +150,7 @@ void runDriver() {
     // Open Claw with L1, Close Claw with L1, Lift Down with R1, Lift Up with R2
     if (controller_1.ButtonL1.pressing() && !l1 && clawState == 0) {
       l1 = true;
-      clawRotator.spin(fwd, 4, volt);
+      clawRotator.spin(fwd, 9, volt);
       claw.spin(fwd, 5, volt);
       clawState = 1;
     } else if (controller_1.ButtonL1.pressing() && !l1 && clawState == 1) {
@@ -183,12 +183,20 @@ void runDriver() {
     //   claw.spin(fwd, 5, volt);
     // }
     if (controller_1.ButtonR1.pressing() && !r1 && after1 == false) {
-      lift.spin(fwd, -12, volt);
+      if (r2) {
+        lift.stop(hold);
+        wait(100, msec);
+      }
+      lift.spin(fwd, -8, volt);
       r1 = true;
     } else if (!controller_1.ButtonR1.pressing() && r1) {
       r1 = false;
     }
     if (controller_1.ButtonR2.pressing() && !r2 && after1 == false) {
+      if (r1) {
+        lift.stop(hold);
+        wait(100, msec);
+      }
       r2 = true;
       lift.spin(fwd, 12, volt);
     } else if (!controller_1.ButtonR2.pressing() && r2) {
@@ -206,7 +214,6 @@ void runDriver() {
       toggle.spin(reverse, 6, volt);
       toggleOn = true;
       buttonX = true;
-
     }
 
     // Toggle control: Button L2 = Toggle on/off. Hold it to override the toggle and run the motor. If the optical sensor detects the wrong color, it will stop the motor.

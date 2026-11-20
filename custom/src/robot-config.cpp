@@ -20,30 +20,30 @@ controller controller_1 = controller(primary);
 
 motor left_chassis1 = motor(PORT11, ratio6_1, true);
 motor left_chassis2 = motor(PORT12, ratio6_1, true);
-motor left_chassis3 = motor(PORT14, ratio18_1, true);
-motor_group left_chassis = motor_group(left_chassis2, left_chassis1, left_chassis3);
+//motor left_chassis3 = motor(PORT14, ratio18_1, true);
+motor_group left_chassis = motor_group(left_chassis2, left_chassis1);
 
 motor right_chassis1 = motor(PORT8, ratio6_1, false);
 motor right_chassis2 = motor(PORT9, ratio6_1, false);
-motor right_chassis3 = motor(PORT17, ratio18_1, false);
-motor_group right_chassis = motor_group(right_chassis2, right_chassis1, right_chassis3);
+//motor right_chassis3 = motor(PORT17, ratio18_1, false);
+motor_group right_chassis = motor_group(right_chassis2, right_chassis1);
 
-motor lift = motor(PORT6, ratio36_1, true);
-// motor liftL = motor(PORT1, ratio36_1, false);
-// motor_group lift = motor_group(liftL, liftR);
+motor liftL = motor(PORT6, ratio36_1, true);
+motor liftR = motor(PORT2, ratio36_1, false);
+motor_group lift = motor_group(liftL, liftR);
 
-motor toggle = motor(PORT2, ratio18_1, true);
+rotation liftTracker = rotation(PORT1, false);
 
-motor clawL = motor(PORT10, ratio18_1, false);
-motor clawR = motor(PORT3, ratio18_1, true);
+motor toggle = motor(PORT3, ratio18_1, true);
+
+motor clawL = motor(PORT7, ratio18_1, false);
+motor clawR = motor(PORT10, ratio18_1, true);
 motor clawRotator = motor(PORT4, ratio18_1, true);
 motor_group claw = motor_group(clawL, clawR);
 
-inertial inertial_sensor = inertial(PORT7);
+inertial inertial_sensor = inertial(PORT17);
 optical toggleOptical = optical(PORT15);
 distance clawDetect = distance(PORT5);
-
-
 
 // Format is rotation(port, reversed)
 // just set these to random ports if you don't use tracking wheels
@@ -75,10 +75,11 @@ double wheel_distance_in = (36.0 / 48.0) * 2.75 * M_PI;
 // turn_to_point_* : PID for turning to face a field point
 // tip_*      : PID for chassis pitch correction
 // heading_correction_* : PID for heading correction during linear movement
-//1.3, 0, 8
-double distance_kp = 1.3, distance_ki = 0.0, distance_kd = 8;
+//1.3, 0, 8 Old
+//1.0, 0, 8.5 Good
+double distance_kp = 1.0, distance_ki = 0.01, distance_kd = 12;
 double sensor_distance_kp = 2, sensor_distance_ki = 0.0, sensor_distance_kd = 7.5;
-double turn_kp = 0.5, turn_ki = 0, turn_kd = 2.7;
+double turn_kp = 0.5, turn_ki = 0.01, turn_kd = 3.0;
 double turn_to_point_kp = 0.5, turn_to_point_ki = 0, turn_to_point_kd = 3.4;
 double tip_kp = 0.8, tip_ki = 0.0, tip_kd = 1.5;
 //0.8, 0, 4

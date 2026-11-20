@@ -250,7 +250,7 @@ void exampleAuton() {
 }
 
 void exampleAuton2(){
-  driveTo(24, 10000, true, 12);
+  turnToAngle(90, 10000, true, 12);
 }
 
 volatile int i = 0;
