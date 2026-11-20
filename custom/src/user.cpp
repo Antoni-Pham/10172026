@@ -6,7 +6,7 @@
 #include "../include/robot-config.h"
 
 volatile int selectedRollerColor = static_cast<int>(RollerColor::Red);
-int auton_selected = 1;
+int auton_selected = 3;
 
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
@@ -16,9 +16,11 @@ void runAutonomous() {
   //updateDriverSubsystems(false);
   
   lift.setPosition(-2, degrees);
+  liftTracker.setPosition(-2, degrees);
   switch(auton_selected){
     case 1:
-      Skills();
+      //Skills();
+      exampleAuton2();
       break;
     case 2:
       if (selectedRollerColor == static_cast<int>(RollerColor::Red))

@@ -48,7 +48,7 @@ distance clawDetect = distance(PORT5);
 // Format is rotation(port, reversed)
 // just set these to random ports if you don't use tracking wheels
 rotation horizontal_tracker = rotation(PORT22, true);
-rotation vertical_tracker = rotation(PORT18, true);
+rotation vertical_tracker = rotation(PORT18, false);
 
 // Distance reset sensors 
 // Set these to random ports if you are not using distance resets
@@ -77,13 +77,15 @@ double wheel_distance_in = (36.0 / 48.0) * 2.75 * M_PI;
 // heading_correction_* : PID for heading correction during linear movement
 //1.3, 0, 8 Old
 //1.0, 0, 8.5 Good
-double distance_kp = 1.0, distance_ki = 0.01, distance_kd = 12;
+//1.5, 0.01, 20 Good
+double distance_kp = 1.5, distance_ki = 0.01, distance_kd = 20;
 double sensor_distance_kp = 2, sensor_distance_ki = 0.0, sensor_distance_kd = 7.5;
 double turn_kp = 0.5, turn_ki = 0.01, turn_kd = 3.0;
 double turn_to_point_kp = 0.5, turn_to_point_ki = 0, turn_to_point_kd = 3.4;
 double tip_kp = 0.8, tip_ki = 0.0, tip_kd = 1.5;
-//0.8, 0, 4
-double heading_correction_kp = 0, heading_correction_ki = 0, heading_correction_kd = 0;
+//0.8, 0, 4 jerky
+//0.05, 0, 0.5 not jerky
+double heading_correction_kp = 0.6, heading_correction_ki = 0, heading_correction_kd = 3;
 
 // Enable or disable the use of tracking wheels
 bool using_horizontal_tracker = false;  // Set to true if a horizontal tracking wheel is installed and used for odometry
