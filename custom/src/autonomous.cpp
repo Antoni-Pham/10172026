@@ -594,8 +594,8 @@ void Pin3Quad1(int color){
   //   return 0; });
   //turnToPoint(27, -48, 1, 900);
   //driveToHeading(8, 180, 600, true, 10);
-  turnToPoint(24, -72, 1, 2000);
-  moveToPoint(24, -72, 1, 700, true, 6);
+  turnToPoint(24, -48, 1, 2000);
+  moveToPoint(24, -48, 1, 700, true, 6);
   //moveToPoint(-40,-20,1,1000,false,8);
   driveChassis(4,4);
   wait(500,msec);
