@@ -6,7 +6,7 @@
 #include "../include/robot-config.h"
 
 volatile int selectedRollerColor = static_cast<int>(RollerColor::Red);
-int auton_selected = 5;
+int auton_selected = 3;
 
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
@@ -39,7 +39,7 @@ void runAutonomous() {
         Pin3Quad1(2);
       }
       driveTo(-10, 1000, true, 10);
-      lift.setTimeout(1.5, sec);
+      lift.setTimeout(1, sec);
       lift.spinToPosition(-15, degrees, false);
       break;
     case 4:
@@ -59,7 +59,7 @@ void runAutonomous() {
         Pin3Quad2(2);
       }
       driveTo(-10, 1000, true, 10);
-      lift.setTimeout(1.5, sec);
+      lift.setTimeout(1, sec);
       lift.spinToPosition(-15, degrees, false);
       break;
     case 6:
@@ -107,6 +107,7 @@ void runDriver() {
   stopChassis(coast);
   heading_correction = false;
 
+  int timer = -1;
   float forward_sensitivity = 0.07;
   float turning_sensitivity = 0.05;
   int ch1 = 0;
@@ -135,7 +136,7 @@ void runDriver() {
   while (true) {
     controller_1.Screen.clearScreen();
     controller_1.Screen.setCursor(1, 1);
-    controller_1.Screen.print("x: %.2f, y: %.2f, h: %.2f", x_pos, y_pos, getInertialHeading());
+    // controller_1.Screen.print("x: %.2f, y: %.2f, h: %.2f", x_pos, y_pos, getInertialHeading());
     // [-100, 100] for controller stick axis values
     ch1 = controller_1.Axis1.value();
     ch2 = controller_1.Axis2.value();
@@ -153,32 +154,41 @@ void runDriver() {
       lift.spinToPosition(-15, degrees, false);
       after1 = true;
     }
-    if (Brain.timer(msec) > 2300 && brainTimerOn && after2 == false) {
+    if ((Brain.timer(msec) > 2300 || liftTracker.angle(degrees) >= 355) && brainTimerOn && after2 == false) {
       brainTimerOn = false;
       after1 = false;
       lift.stop(hold);
       lift.setPosition(0, degrees);
       after2 = true;
     }
+    //controller_1.Screen.print("liftTracker: %f\n", liftTracker.angle(degrees));
     // Open Claw with L1, Close Claw with L1, Lift Down with R1, Lift Up with R2
     if (controller_1.ButtonL1.pressing() && !l1 && clawState == 0) {
       l1 = true;
-      clawRotator.spin(fwd, 9, volt);
+      clawRotator.spin(fwd, 6, volt);
       claw.spin(fwd, 5, volt);
       clawState = 1;
+      timer = -1;
     } else if (controller_1.ButtonL1.pressing() && !l1 && clawState == 1) {
       l1 = true;
-      clawRotator.spin(fwd, -4, volt);
+      timer = 0;
+      clawRotator.spin(fwd, -6, volt);
       claw.stop(coast);
       clawState = 0;
       Brain.resetTimer();
-
       brainTimerOn = true;
       after1 = false;
       after2 = false;
     } else if (!controller_1.ButtonL1.pressing() && l1) {
       l1 = false;
       claw.spin(fwd, 5, volt);
+    } else {
+      if (timer >= 150)
+      {
+        clawRotator.setStopping(hold);
+        clawRotator.stop();
+        timer = -1;
+      }
     }
     // if (controller_1.ButtonL1.pressing() && !l1 && clawState == 1) {
     //   l1 = true;
@@ -256,6 +266,9 @@ void runDriver() {
       l2 = false;
       forward_sensitivity = 0.07;
       turning_sensitivity = 0.05;
+    }
+    if (timer >= 0) {
+      timer += 15;
     }
     wait(15, msec);
     //red 0-30
