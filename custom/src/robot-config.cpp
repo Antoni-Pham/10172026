@@ -28,8 +28,8 @@ motor right_chassis2 = motor(PORT9, ratio6_1, false);
 //motor right_chassis3 = motor(PORT17, ratio18_1, false);
 motor_group right_chassis = motor_group(right_chassis2, right_chassis1);
 
-motor liftL = motor(PORT6, ratio36_1, true);
-motor liftR = motor(PORT2, ratio36_1, false);
+motor liftL = motor(PORT6, ratio18_1, true);
+motor liftR = motor(PORT2, ratio18_1, false);
 motor_group lift = motor_group(liftL, liftR);
 
 rotation liftTracker = rotation(PORT1, false);
@@ -80,7 +80,7 @@ double wheel_distance_in = (36.0 / 48.0) * 2.75 * M_PI;
 //1.5, 0.01, 20 Good
 double distance_kp = 1.5, distance_ki = 0.01, distance_kd = 20;
 double sensor_distance_kp = 2, sensor_distance_ki = 0.0, sensor_distance_kd = 7.5;
-double turn_kp = 0.5, turn_ki = 0.01, turn_kd = 3.0;
+double turn_kp = 0.5, turn_ki = 0.01, turn_kd = 3.4;
 double turn_to_point_kp = 0.5, turn_to_point_ki = 0, turn_to_point_kd = 3.4;
 double tip_kp = 0.8, tip_ki = 0.0, tip_kd = 1.5;
 //0.8, 0, 4 jerky
@@ -96,7 +96,7 @@ bool using_vertical_tracker = true;   // Set to true if a vertical tracking whee
 // Vertical distance from the center of the bot to the horizontal tracking wheel (in inches, positive is when the wheel is behind the center)
 double horizontal_tracker_dist_from_center = 2.71875;
 // Horizontal distance from the center of the bot to the vertical tracking wheel (in inches, positive is when the wheel is to the right of the center)
-double vertical_tracker_dist_from_center = 0.5;
+double vertical_tracker_dist_from_center = 0.3;
 double horizontal_tracker_diameter = 1.975; // Diameter of the horizontal tracker wheel (in inches)
 double vertical_tracker_diameter = 1.975; // Diameter of the vertical tracker wheel (in inches)
 

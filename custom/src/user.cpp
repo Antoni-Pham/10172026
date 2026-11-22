@@ -6,7 +6,7 @@
 #include "../include/robot-config.h"
 
 volatile int selectedRollerColor = static_cast<int>(RollerColor::Red);
-int auton_selected = 3;
+int auton_selected = 5;
 
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
@@ -38,6 +38,9 @@ void runAutonomous() {
       } else if (selectedRollerColor == static_cast<int>(RollerColor::Blue)){
         Pin3Quad1(2);
       }
+      driveTo(-10, 1000, true, 10);
+      lift.setTimeout(1.5, sec);
+      lift.spinToPosition(-15, degrees, false);
       break;
     case 4:
       if (selectedRollerColor == static_cast<int>(RollerColor::Red))
@@ -55,6 +58,9 @@ void runAutonomous() {
       } else if (selectedRollerColor == static_cast<int>(RollerColor::Blue)){
         Pin3Quad2(2);
       }
+      driveTo(-10, 1000, true, 10);
+      lift.setTimeout(1.5, sec);
+      lift.spinToPosition(-15, degrees, false);
       break;
     case 6:
       break;
@@ -123,8 +129,13 @@ void runDriver() {
   left_chassis.setMaxTorque(1000000, vex::currentUnits::amp);
   right_chassis.setVelocity(100, pct);
   right_chassis.setMaxTorque(1000000, vex::currentUnits::amp);
-
+  x_pos = 0;
+  y_pos = 0;
+  vertical_tracker.setPosition(0, degrees);
   while (true) {
+    controller_1.Screen.clearScreen();
+    controller_1.Screen.setCursor(1, 1);
+    controller_1.Screen.print("x: %.2f, y: %.2f, h: %.2f", x_pos, y_pos, getInertialHeading());
     // [-100, 100] for controller stick axis values
     ch1 = controller_1.Axis1.value();
     ch2 = controller_1.Axis2.value();
