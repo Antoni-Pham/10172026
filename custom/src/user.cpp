@@ -6,7 +6,7 @@
 #include "../include/robot-config.h"
 
 volatile int selectedRollerColor = static_cast<int>(RollerColor::Red);
-int auton_selected = 3;
+int auton_selected = 1;
 
 // Modify autonomous, driver, or pre-auton code below
 competition Competition;
@@ -19,8 +19,8 @@ void runAutonomous() {
   liftTracker.setPosition(-2, degrees);
   switch(auton_selected){
     case 1:
-      //Skills();
-      exampleAuton2();
+      Skills();
+      //exampleAuton2();
       break;
     case 2:
       if (selectedRollerColor == static_cast<int>(RollerColor::Red))
@@ -133,6 +133,7 @@ void runDriver() {
   x_pos = 0;
   y_pos = 0;
   vertical_tracker.setPosition(0, degrees);
+  liftTracker.setPosition(-2, degrees);
   while (true) {
     controller_1.Screen.clearScreen();
     controller_1.Screen.setCursor(1, 1);
@@ -150,11 +151,11 @@ void runDriver() {
     // updateDriverSubsystems(l2);
 
     if (Brain.timer(msec) > 500 && brainTimerOn && after1 == false) {
-      lift.setVelocity(82, percent);
+      lift.setVelocity(50, percent);
       lift.spinToPosition(-15, degrees, false);
       after1 = true;
     }
-    if ((Brain.timer(msec) > 2300 || liftTracker.angle(degrees) >= 355) && brainTimerOn && after2 == false) {
+    if ((Brain.timer(msec) > 3300 || liftTracker.angle(degrees) >= 355) && brainTimerOn && after2 == false) {
       brainTimerOn = false;
       after1 = false;
       lift.stop(hold);
@@ -205,21 +206,25 @@ void runDriver() {
     //   clawRotator.spin(fwd, -4, volt);
     //   claw.spin(fwd, 5, volt);
     // }
-    if (controller_1.ButtonR1.pressing() && !r1 && after1 == false) {
-      if (r2) {
+    if (controller_1.ButtonR1.pressing() && !r1) {
+      if (r2 || after1) {
         lift.stop(hold);
         wait(100, msec);
       }
+      after1 = false;
+      brainTimerOn = false;
       lift.spin(fwd, -8, volt);
       r1 = true;
     } else if (!controller_1.ButtonR1.pressing() && r1) {
       r1 = false;
     }
-    if (controller_1.ButtonR2.pressing() && !r2 && after1 == false) {
-      if (r1) {
+    if (controller_1.ButtonR2.pressing() && !r2) {
+      if (r1 || after1) {
         lift.stop(hold);
         wait(100, msec);
       }
+      after1 = false;
+      brainTimerOn = false;
       r2 = true;
       lift.spin(fwd, 12, volt);
     } else if (!controller_1.ButtonR2.pressing() && r2) {
@@ -234,7 +239,7 @@ void runDriver() {
     } else if (controller_1.ButtonX.pressing() && !toggleOn && !buttonX) {
       forward_sensitivity = 0.10;
       turning_sensitivity = 0.08;
-      toggle.spin(reverse, 6, volt);
+      toggle.spin(reverse, 12, volt);
       toggleOn = true;
       buttonX = true;
     }
@@ -245,7 +250,7 @@ void runDriver() {
     } else if (controller_1.ButtonL2.pressing() && !toggleOn && !l2) {
       forward_sensitivity = 0.10;
       turning_sensitivity = 0.08;
-      toggle.spin(reverse, 12, volt);
+      toggle.spin(reverse, 6, volt);
       toggleOn = true;
       l2 = true;
     } else if (controller_1.ButtonL2.pressing() && toggleOn && !l2) {
@@ -260,7 +265,7 @@ void runDriver() {
       l2 = false;
       forward_sensitivity = 0.07;
       turning_sensitivity = 0.05;
-    } else if (toggleOptical.isNearObject() && toggleOptical.value() > 0 && toggleOptical.value() < 30 && toggleOn && selectedRollerColor == static_cast<int>(RollerColor::Red) && !l2) {
+    } else if (toggleOptical.isNearObject() && toggleOptical.value() > 5 && toggleOptical.value() < 45 && toggleOn && selectedRollerColor == static_cast<int>(RollerColor::Red) && !l2) {
       toggle.stop(hold);
       toggleOn = false;
       l2 = false;
@@ -271,7 +276,7 @@ void runDriver() {
       timer += 15;
     }
     wait(15, msec);
-    //red 0-30
+    //red 5-45
     //yellow 60-90
     //blue 180-210
     // if(!controller_1.ButtonY.pressing() && buttonY){
@@ -365,8 +370,8 @@ void drawRollerColorSelector() {
     Brain.Screen.setCursor(button_y / 20 + 1, x / 10 + 2);
     Brain.Screen.print("%s", labels[i]);
   }
-  Brain.Screen.setFillColor("RED");
-  Brain.Screen.setPenColor(white);
+  Brain.Screen.setFillColor("BLACK");
+  Brain.Screen.setPenColor("WHITE");
   Brain.Screen.setCursor(11, 2);
   Brain.Screen.print("Selected color: %d, Autonomous: %d", selectedRollerColor, auton_selected);
 }
@@ -395,10 +400,24 @@ void rollerColorSelectorLoopAndAuton() {
         auton_selected++;
       }
       Brain.Screen.setCursor(11, 2);
+      //red 5-45
+    //yellow 60-90
+    //blue 180-210
+      if (toggleOptical.value() > 5 && toggleOptical.value() < 45)
+      {
+        Brain.Screen.setPenColor(red);
+      } else if ( toggleOptical.value() > 60 && toggleOptical.value() < 90)
+      {
+        Brain.Screen.setPenColor(yellow);
+      } else if (toggleOptical.value() > 180 && toggleOptical.value() < 210)
+      {
+        Brain.Screen.setPenColor(blue);
+      } else {
+        Brain.Screen.setPenColor(white);
+      }
       Brain.Screen.print("Selected color: %d, Autonomous: %d", selectedRollerColor, auton_selected);
     }
     was_pressed = pressed;
-    
     wait(20, msec);
   }
 }
